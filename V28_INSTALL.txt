@@ -1,0 +1,31 @@
+V28 Policy Portfolio — วิธีติดตั้ง
+================================
+
+ไฟล์: v28-policy-portfolio.js
+
+1) อัปโหลดไฟล์ v28-policy-portfolio.js ไปไว้ที่ root ของ repo เดียวกับ index.html
+
+2) ใน index.html ให้เพิ่มสคริปต์นี้ "หลัง" v27-commercial.js (หรือหลังไฟล์เสริมตัวสุดท้าย):
+   <script src="./v28-policy-portfolio.js?v=20260822"></script>
+
+3) Commit แล้วรอ GitHub Pages deploy ประมาณ 1–3 นาที จากนั้นรีเฟรชแบบล้าง cache
+
+สิ่งที่ V28 ทำ
+- ใช้เมนู “กรมธรรม์” เดิม ไม่สร้างเมนูใหม่
+- เปิด Dashboard Policy View แบบ full-screen/mobile-first
+- แยกปุ่ม “ถ่ายรูป” / “อัปโหลดไฟล์” / “เพิ่มกรมธรรม์”
+- ถ่ายรูปใช้กล้องหลัง: accept=image/* + capture=environment
+- อัปโหลดรองรับ JPG/PNG/WebP/PDF/XLS/XLSX สูงสุด 15 MB
+- ไฟล์ถูกเก็บใน Supabase Storage bucket: policy-documents แบบ private
+- เพิ่ม/แก้ไข/ลบข้อมูลใน insurance_policies
+- ดูไฟล์ต้นฉบับด้วย signed URL
+- สรุปจำนวนกรมธรรม์ / ทุนชีวิต / เบี้ยต่อปี / สุขภาพ / CI
+- กราฟข้อมูลรายปีจาก yearly_data
+- สัดส่วนตามประเภท
+- ส่งออก PDF ผ่าน Print/Save as PDF
+- เผยแพร่ค่า window.policyPortfolioSummary และ event policyportfolio:changed เพื่อให้ส่วนวางแผนนำไปใช้กับ Protection Gap
+
+หมายเหตุ
+- ฐานข้อมูลถูกเตรียมแล้ว: insurance_policies.source_file_path
+- Storage bucket และ RLS สำหรับ policy-documents ถูกสร้างแล้ว
+- ถ้าไม่มีลูกค้าที่เลือกอยู่ ระบบจะแจ้งให้เลือกลูกค้าก่อน
