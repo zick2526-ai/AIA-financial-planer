@@ -31,6 +31,7 @@ A web-based financial and insurance planning system for advisors. The applicatio
 
 ## Documentation
 
+- [Current project state](docs/PROJECT_STATE.md)
 - [Project overview](docs/PROJECT_OVERVIEW.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Database](docs/DATABASE_SCHEMA.md)
