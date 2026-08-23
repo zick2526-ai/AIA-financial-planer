@@ -13,7 +13,7 @@
       const frozen='https://raw.githubusercontent.com/zick2526-ai/AIA-financial-planer/aaff1a2ef80c6d9c7bb6b3a5893759e7a4e22e26/index.html';
       let h=await (await fetch(frozen,{cache:'no-store'})).text();
       const target="h=h.replace('</body>',addons+'</body>');";
-      const replacement="h=h.replace('</body>',addons+'<script src=\"./policy-scanner.js?v=20260822a\"><\\/script><script src=\"./admin-launcher.js?v=20260823a\"><\\/script><script src=\"./db-bridge.js?v=20260823a\"><\\/script><script src=\"./client-context-bridge.js?v=20260823a\"><\\/script><script src=\"./health-planner.js?v=20260823c\"><\\/script><script src=\"./health-planner-v2.js?v=20260823c\"><\\/script><script src=\"./report-generator.js?v=20260823a\"><\\/script></body>');";
+      const replacement="h=h.replace('</body>',addons+'<script src=\"./policy-scanner.js?v=20260822a\"><\\/script><script src=\"./admin-launcher.js?v=20260823a\"><\\/script><script src=\"./db-bridge.js?v=20260823a\"><\\/script><script src=\"./client-context-bridge.js?v=20260823a\"><\\/script><script src=\"./health-planner.js?v=20260823c\"><\\/script><script src=\"./health-planner-v2.js?v=20260823c\"><\\/script><script src=\"./report-generator.js?v=20260823a\"><\\/script><script src=\"./health-report-sync.js?v=20260823a\"><\\/script></body>');";
       if(!h.includes(target)) throw new Error('ไม่พบจุดเชื่อมส่วนเสริม');
       h=h.replace(target,replacement);
       document.open();
