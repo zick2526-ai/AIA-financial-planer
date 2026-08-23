@@ -1,0 +1,1 @@
+(()=>{'use strict';try{if(typeof sb!=='undefined'&&sb&&typeof sb.from==='function'){window.sb=sb;return}}catch(_){}try{if(typeof supabaseClient!=='undefined'&&supabaseClient&&typeof supabaseClient.from==='function'){window.supabaseClient=supabaseClient;return}}catch(_){}try{if(typeof db!=='undefined'&&db&&typeof db.from==='function'){window.db=db;return}}catch(_){}})();
