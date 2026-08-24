@@ -24,6 +24,18 @@
       let h;
       try{ h=await loadBase(frozen,8000); }
       catch(firstErr){ console.warn('[AIA Loader] raw fallback',firstErr); h=await loadBase(fallback,8000); }
+
+      // Patch the frozen app BEFORE it renders: Clients is the true initial Home.
+      const nestedFetch="let h=await (await fetch(u,{cache:'no-store'})).text();";
+      const nestedHomePatch=`let h=await (await fetch(u,{cache:'no-store'})).text();
+      h=h.replace('<button class="active" data-tab="dashboard">แดชบอร์ด</button>','<button data-tab="dashboard">แดชบอร์ด</button>');
+      h=h.replace('<button data-tab="clients">ลูกค้าของฉัน</button>','<button class="active" data-tab="clients">ลูกค้าของฉัน</button>');
+      h=h.replace('<section id="clients" class="section">','<section id="clients" class="section active">');
+      h=h.replace('<section id="dashboard" class="section active">','<section id="dashboard" class="section">');
+      h=h.replace('<h2 id="pageTitle">สรุปแผนการเงินลูกค้า</h2>','<h2 id="pageTitle">ลูกค้าของฉัน</h2>');
+      h=h.replace('<p id="clientLine">กรอกข้อมูลเพื่อสร้าง Financial Health Check และ Protection Plan</p>','<p id="clientLine">ค้นหา เลือก หรือสร้างลูกค้าใหม่เพื่อเริ่มวางแผน</p>');`;
+      if(h.includes(nestedFetch)) h=h.replace(nestedFetch,nestedHomePatch);
+
       h=h.replace('location.reload();',"if(typeof window.loadClients==='function') await window.loadClients(); if(typeof window.openClient==='function'){ await window.openClient(id); return; }");
       const target="h=h.replace('</body>',addons+'</body>');";
       const replacement="h=h.replace('</body>',addons+'<script src=\"./policy-scanner.js?v=20260822a\"><\\/script><script src=\"./admin-launcher.js?v=20260823a\"><\\/script><script src=\"./db-bridge.js?v=20260823a\"><\\/script><script src=\"./client-context-bridge.js?v=20260823a\"><\\/script><script src=\"./health-planner.js?v=20260823c\"><\\/script><script src=\"./health-planner-v2.js?v=20260823c\"><\\/script><script src=\"./report-generator.js?v=20260823a\"><\\/script><script src=\"./health-report-sync.js?v=20260823a\"><\\/script><script src=\"./calendar-assistant.js?v=20260824a\"><\\/script><script src=\"./ux-policy-v29.js?v=20260824a\"><\\/script><script src=\"./policy-benefit-builder-v30.js?v=20260824b\"><\\/script><script src=\"./contextual-navigation-v35.js?v=20260824g\"><\\/script><script src=\"./navigation-controls-v36.js?v=20260824h\"><\\/script><script src=\"./home-workspace-v37.js?v=20260824i\"><\\/script></body>');";
