@@ -9,12 +9,24 @@
   <div id="loading" style="font-family:system-ui;padding:24px">กำลังโหลด AIA Financial Planner...</div>
   <script>
   (async()=>{
+    const frozen='https://raw.githubusercontent.com/zick2526-ai/AIA-financial-planer/aaff1a2ef80c6d9c7bb6b3a5893759e7a4e22e26/index.html';
+    const fallback='https://cdn.jsdelivr.net/gh/zick2526-ai/AIA-financial-planer@aaff1a2ef80c6d9c7bb6b3a5893759e7a4e22e26/index.html';
+    async function loadBase(url,ms){
+      const ctrl=new AbortController();
+      const timer=setTimeout(()=>ctrl.abort(),ms);
+      try{
+        const res=await fetch(url,{cache:'no-store',signal:ctrl.signal});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        return await res.text();
+      }finally{clearTimeout(timer)}
+    }
     try {
-      const frozen='https://raw.githubusercontent.com/zick2526-ai/AIA-financial-planer/aaff1a2ef80c6d9c7bb6b3a5893759e7a4e22e26/index.html';
-      let h=await (await fetch(frozen,{cache:'no-store'})).text();
+      let h;
+      try{ h=await loadBase(frozen,8000); }
+      catch(firstErr){ console.warn('[AIA Loader] raw fallback',firstErr); h=await loadBase(fallback,8000); }
       h=h.replace('location.reload();',"if(typeof window.loadClients==='function') await window.loadClients(); if(typeof window.openClient==='function'){ await window.openClient(id); return; }");
       const target="h=h.replace('</body>',addons+'</body>');";
-      const replacement="h=h.replace('</body>',addons+'<script src=\"./policy-scanner.js?v=20260822a\"><\\/script><script src=\"./admin-launcher.js?v=20260823a\"><\\/script><script src=\"./db-bridge.js?v=20260823a\"><\\/script><script src=\"./client-context-bridge.js?v=20260823a\"><\\/script><script src=\"./health-planner.js?v=20260823c\"><\\/script><script src=\"./health-planner-v2.js?v=20260823c\"><\\/script><script src=\"./report-generator.js?v=20260823a\"><\\/script><script src=\"./health-report-sync.js?v=20260823a\"><\\/script><script src=\"./calendar-assistant.js?v=20260824a\"><\\/script><script src=\"./ux-policy-v29.js?v=20260824a\"><\\/script><script src=\"./policy-benefit-builder-v30.js?v=20260824b\"><\\/script><script src=\"./contextual-navigation-v33.js?v=20260824e\"><\\/script></body>');";
+      const replacement="h=h.replace('</body>',addons+'<script src=\"./policy-scanner.js?v=20260822a\"><\\/script><script src=\"./admin-launcher.js?v=20260823a\"><\\/script><script src=\"./db-bridge.js?v=20260823a\"><\\/script><script src=\"./client-context-bridge.js?v=20260823a\"><\\/script><script src=\"./health-planner.js?v=20260823c\"><\\/script><script src=\"./health-planner-v2.js?v=20260823c\"><\\/script><script src=\"./report-generator.js?v=20260823a\"><\\/script><script src=\"./health-report-sync.js?v=20260823a\"><\\/script><script src=\"./calendar-assistant.js?v=20260824a\"><\\/script><script src=\"./ux-policy-v29.js?v=20260824a\"><\\/script><script src=\"./policy-benefit-builder-v30.js?v=20260824b\"><\\/script><script src=\"./contextual-navigation-v34.js?v=20260824f\"><\\/script></body>');";
       if(!h.includes(target)) throw new Error('ไม่พบจุดเชื่อมส่วนเสริม');
       h=h.replace(target,replacement);
       document.open();
@@ -22,7 +34,7 @@
       document.close();
     }catch(e){
       console.error('[AIA Loader]',e);
-      document.getElementById('loading').textContent='โหลดระบบไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ';
+      document.getElementById('loading').innerHTML='<b>โหลดระบบไม่สำเร็จ</b><br><span style="font-size:13px;color:#666">กรุณากดรีเฟรชอีกครั้ง หากยังไม่ขึ้นให้ปิดแท็บแล้วเปิดใหม่</span>';
     }
   })();
   </script>
