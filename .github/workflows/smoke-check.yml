@@ -30,13 +30,13 @@ jobs:
           node --check policy-scanner.js
           node --check ux-policy-v29.js
           node --check policy-benefit-builder-v30.js
-      - name: Verify required production scripts are referenced
+      - name: Verify flat builder includes required modules
         run: |
-          grep -q 'client-store-v42.js' index.html
-          grep -q 'calendar-store-v43.js' index.html
-          grep -q 'report-store-v44.js' index.html
-          grep -q 'insurance-review-v48.js' index.html
-          grep -q 'insurance-review-ai-v50.js' index.html
-          grep -q 'advisor-review-v51.js' index.html
-          grep -q 'app-shell-v41.js' index.html
-          grep -q 'admin-menu-v46.js' index.html
+          grep -q 'client-store-v42.js' scripts/build-flat.mjs
+          grep -q 'calendar-store-v43.js' scripts/build-flat.mjs
+          grep -q 'report-store-v44.js' scripts/build-flat.mjs
+          grep -q 'insurance-review-v48.js' scripts/build-flat.mjs
+          grep -q 'insurance-review-ai-v50.js' scripts/build-flat.mjs
+          grep -q 'advisor-review-v51.js' scripts/build-flat.mjs
+          grep -q 'app-shell-v41.js' scripts/build-flat.mjs
+          grep -q 'admin-menu-v46.js' scripts/build-flat.mjs
