@@ -24,7 +24,7 @@ jobs:
           node --check insurance-review-v48.js
           node --check insurance-review-ai-v50.js
           node --check sales-comparison-ui-v52.js
-          node --check sales-advisor-v53.js
+          node --check sales-advisor-v56.js
           node --check comparison-attachments-v55.js
           node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
@@ -41,8 +41,9 @@ jobs:
           grep -q 'insurance-review-v48.js' scripts/build-flat.mjs
           grep -q 'insurance-review-ai-v50.js' scripts/build-flat.mjs
           grep -q 'sales-comparison-ui-v52.js' scripts/build-flat.mjs
-          grep -q 'sales-advisor-v53.js' scripts/build-flat.mjs
+          grep -q 'sales-advisor-v56.js' scripts/build-flat.mjs
           grep -q 'comparison-attachments-v55.js' scripts/build-flat.mjs
           grep -q 'app-shell-v41.js' scripts/build-flat.mjs
           grep -q 'admin-menu-v46.js' scripts/build-flat.mjs
           if grep -q 'advisor-review-v51.js' scripts/build-flat.mjs; then echo 'legacy V51 must not be in production build'; exit 1; fi
+          if grep -q 'sales-advisor-v53.js' scripts/build-flat.mjs; then echo 'legacy V53 must not be in production build'; exit 1; fi
