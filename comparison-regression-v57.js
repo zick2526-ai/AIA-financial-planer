@@ -38,6 +38,16 @@ function renderAttachments(r){
   status.textContent=atts.length?`มีไฟล์แนบ ${atts.length} ไฟล์ · พร้อมใช้ในการเปรียบเทียบ`:'ยังไม่ได้แนบไฟล์ · ไฟล์ต้นฉบับจะไม่ถูกอัปโหลดเก็บโดยอัตโนมัติ';
 }
 document.addEventListener('click',async e=>{
+  const analyze=e.target.closest?.('#ir48-analyze,#ir50-analyze');
+  if(analyze){
+    e.preventDefault();e.stopImmediatePropagation();
+    try{
+      await syncCurrentDraft();
+      const api=window.AIAInsuranceReviewAIV50;
+      if(!api||typeof api.analyze!=='function')throw new Error('โมดูล AI ยังโหลดไม่พร้อม');
+      return await api.analyze(analyze);
+    }catch(err){toast(err?.message||'เตรียมข้อมูลก่อนเรียก AI ไม่สำเร็จ');return}
+  }
   const copy=e.target.closest?.('#ir50-copy-line');
   if(copy){e.preventDefault();e.stopImmediatePropagation();const ok=await safeCopy(root()?.querySelector('#ir50-line')?.textContent||'');toast(ok?'คัดลอกข้อความ LINE แล้ว':'คัดลอกอัตโนมัติไม่ได้ กรุณากดค้างที่ข้อความเพื่อคัดลอก');return}
   const oldRemove=e.target.closest?.('[data-ca55-remove]');
