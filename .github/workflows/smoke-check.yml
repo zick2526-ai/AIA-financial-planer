@@ -1,0 +1,36 @@
+name: Smoke Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: JavaScript syntax check
+        run: |
+          node --check client-store-v42.js
+          node --check dashboard-store-v45.js
+          node --check calendar-store-v43.js
+          node --check report-store-v44.js
+          node --check app-shell-v41.js
+          node --check admin-menu-v46.js
+          node --check policy-scanner.js
+          node --check ux-policy-v29.js
+          node --check policy-benefit-builder-v30.js
+      - name: Verify required production scripts are referenced
+        run: |
+          grep -q 'client-store-v42.js' index.html
+          grep -q 'dashboard-store-v45.js' index.html
+          grep -q 'calendar-store-v43.js' index.html
+          grep -q 'report-store-v44.js' index.html
+          grep -q 'app-shell-v41.js' index.html
+          grep -q 'admin-menu-v46.js' index.html
