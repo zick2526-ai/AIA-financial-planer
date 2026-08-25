@@ -1,53 +1,1216 @@
 <!doctype html>
 <html lang="th">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AIA Financial Planner</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AIA Financial Planning Dashboard</title>
+<style>
+:root{--red:#d31145;--red2:#a90d35;--pink:#fff1f5;--ink:#171717;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;--ok:#118a5b;--warn:#d97706;--bad:#c62828;--card:#fff;--shadow:0 10px 28px rgba(19,24,36,.08)}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,"Noto Sans Thai",system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}.mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.5px}.brand h1{font-size:16px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:2px 0 0}.nav button{width:100%;border:0;background:transparent;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;margin:3px 0;font-size:14px;color:#404040}.nav button.active,.nav button:hover{background:var(--pink);color:var(--red);font-weight:700}.side-note{position:absolute;bottom:18px;left:18px;right:18px;font-size:11px;line-height:1.55;color:var(--muted);background:#fafafa;border:1px solid var(--line);border-radius:12px;padding:12px}
+.main{padding:28px 32px 50px;max-width:1500px;width:100%}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px}.top h2{font-size:28px;margin:0 0 6px}.top p{margin:0;color:var(--muted)}.pill{background:var(--pink);color:var(--red);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700}.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{font-size:26px;font-weight:800;margin:5px 0}.kpi .sub{font-size:12px}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.section{display:none}.section.active{display:block}.two{grid-template-columns:1.2fr .8fr}.three{grid-template-columns:repeat(3,1fr)}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.head h3{margin:0;font-size:18px}.head span{font-size:12px;color:var(--muted)}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;font-size:12px;color:#555;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid #d9dde5;border-radius:10px;padding:11px 12px;font-size:14px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(211,17,69,.08)}.group-title{grid-column:1/-1;margin:10px 0 0;font-size:13px;font-weight:800;color:var(--red);border-bottom:1px dashed #f2b2c4;padding-bottom:6px}
+.progress{height:10px;border-radius:999px;background:#eceff3;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--red),#ff668f);width:0}.metric{display:flex;justify-content:space-between;font-size:13px;margin:10px 0 6px}.rec{border-left:4px solid var(--red);padding:12px 14px;background:#fff7f9;border-radius:10px;margin:10px 0}.rec strong{display:block;margin-bottom:4px}.rec small{color:var(--muted);line-height:1.5}.prod{border:1px solid #f3c0cf;background:#fff;border-radius:14px;padding:14px;margin:10px 0}.prod-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.prod h4{margin:4px 0 6px;font-size:15px}.prod .why{font-size:12px;line-height:1.65;color:#4b5563}.prod .fit{margin-top:8px;font-size:11px;color:#7a3148;background:#fff3f6;border-radius:8px;padding:8px}.prod .reason{font-weight:700;color:var(--red)}.tag{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:700;margin-right:5px;background:#f3f4f6}.tag.high{background:#ffe4e9;color:#a20d35}.tag.mid{background:#fff2d9;color:#9a5a00}.tag.good{background:#e7f7ef;color:#087449}
+.chart{height:220px;display:flex;align-items:flex-end;gap:18px;padding:18px 12px 8px;border-bottom:1px solid var(--line)}.col{flex:1;text-align:center}.col .cbar{border-radius:12px 12px 4px 4px;background:linear-gradient(180deg,#ff7a9d,var(--red));min-height:4px}.col label{display:block;margin-top:8px;font-size:11px;color:var(--muted)}.legend{font-size:12px;color:var(--muted);margin-top:10px}.score{width:126px;height:126px;border-radius:50%;display:grid;place-items:center;margin:8px auto 14px;background:conic-gradient(var(--red) 0deg,#e5e7eb 0deg)}.score-inner{width:94px;height:94px;background:#fff;border-radius:50%;display:grid;place-items:center;text-align:center}.score-inner b{font-size:26px}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}.table th{font-size:11px;color:var(--muted)}.btn{border:0;border-radius:10px;padding:11px 15px;cursor:pointer;font-weight:700}.btn.red{background:var(--red);color:#fff}.btn.light{background:#fff;border:1px solid var(--line)}.actions{display:flex;gap:8px;flex-wrap:wrap}.notice{font-size:11px;line-height:1.55;color:var(--muted);margin-top:12px}.hero{background:linear-gradient(135deg,#8b092d,#d31145 60%,#f0527d);color:#fff;border:none}.hero p{color:#ffeaf0}.hero .pill{background:rgba(255,255,255,.18);color:white}.hero-grid{display:grid;grid-template-columns:1.4fr .6fr;gap:18px;align-items:center}.hero h3{font-size:24px;margin:0 0 8px}.hero .big{font-size:38px;font-weight:900}.hidden{display:none}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.side{height:auto;position:relative;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;overflow:auto;gap:6px}.nav button{white-space:nowrap;width:auto}.side-note{display:none}.main{padding:20px}.kpis,.three,.two{grid-template-columns:1fr 1fr}.hero-grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.kpis,.three,.two,.formgrid{grid-template-columns:1fr}.top{flex-direction:column}.main{padding:16px}.top h2{font-size:23px}.card{border-radius:14px;padding:15px}.hero .big{font-size:30px}}
+
+/* V2 cloud data */
+.auth-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#8b092d,#d31145 60%,#f0527d);display:grid;place-items:center;padding:20px}.auth-card{width:min(460px,100%);background:#fff;border-radius:22px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.auth-card h2{margin:0 0 6px}.auth-card p{color:var(--muted);font-size:13px}.auth-card input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin:7px 0}.auth-actions{display:flex;gap:8px;margin-top:10px}.auth-status{font-size:12px;margin-top:10px;color:var(--muted)}.cloudbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px}.cloudbar .who{font-size:12px;color:var(--muted);margin-left:auto}.client-list{display:grid;gap:10px}.client-item{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer}.client-item:hover,.client-item.active{border-color:#e68aa5;background:#fff7f9}.client-meta{font-size:11px;color:var(--muted);margin-top:3px}.status-dot{width:9px;height:9px;border-radius:50%;background:#16a34a;display:inline-block}.toast{position:fixed;right:18px;bottom:18px;z-index:10000;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);display:none}.mini{font-size:11px;color:var(--muted)}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div id="loading" style="font-family:system-ui;padding:24px">กำลังโหลด AIA Financial Planner...</div>
-  <script>
-  (async()=>{
-    const frozen='https://raw.githubusercontent.com/zick2526-ai/AIA-financial-planer/aaff1a2ef80c6d9c7bb6b3a5893759e7a4e22e26/index.html';
-    const fallback='https://cdn.jsdelivr.net/gh/zick2526-ai/AIA-financial-planer@aaff1a2ef80c6d9c7bb6b3a5893759e7a4e22e26/index.html';
-    async function loadBase(url,ms){
-      const ctrl=new AbortController();
-      const timer=setTimeout(()=>ctrl.abort(),ms);
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-card">
+    <div class="mark" style="margin-bottom:14px">AIA</div>
+    <h2>AIA Financial Planner V2</h2>
+    <p>เข้าสู่ระบบเพื่อบันทึกและเรียกดูข้อมูลลูกค้าของคุณอย่างปลอดภัย</p>
+    <input id="authEmail" type="email" placeholder="อีเมล" autocomplete="email">
+    <input id="authPassword" type="password" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" autocomplete="current-password">
+    <div class="auth-actions">
+      <button class="btn red" onclick="loginUser()">เข้าสู่ระบบ</button>
+      <button class="btn light" onclick="signupUser()">สมัครใช้งาน</button>
+    </div>
+    <div id="authStatus" class="auth-status">ข้อมูลจะถูกเก็บใน Supabase และจำกัดการเข้าถึงตามบัญชี Advisor</div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+<div class="app">
+<aside class="side">
+ <div class="brand"><div class="mark">AIA</div><div><h1>Financial Planner</h1><p>Needs Analysis Dashboard</p></div></div>
+ <div class="nav">
+  <button data-tab="dashboard">แดชบอร์ด</button>
+  <button class="active" data-tab="clients">ลูกค้าของฉัน</button>
+  <button data-tab="profile">ข้อมูลลูกค้า</button>
+  <button data-tab="finance">ฐานะการเงิน</button>
+  <button data-tab="risk">ความเสี่ยง & ประกัน</button>
+  <button data-tab="retire">เกษียณ</button>
+  <button data-tab="tax">ภาษี</button>
+ </div>
+ <div class="side-note">เครื่องมือนี้เป็นตัวช่วยวิเคราะห์เบื้องต้น ไม่ใช่ข้อเสนอขายหรือการรับประกัน ผลิตภัณฑ์จริงขึ้นกับคุณสมบัติผู้สมัคร เงื่อนไขกรมธรรม์ การพิจารณารับประกัน และเอกสารบริษัทที่เป็นปัจจุบัน</div>
+</aside>
+<main class="main">
+ <div class="cloudbar">
+   <span class="status-dot"></span><b style="font-size:12px">Cloud Save พร้อมใช้งาน</b>
+   <button class="btn red" onclick="saveCurrentClient()">บันทึกลูกค้าปัจจุบัน</button>
+   <button class="btn light" onclick="newClient()">ลูกค้าใหม่</button>
+   <span class="who" id="currentUserLabel"></span>
+   <button class="btn light" onclick="logoutUser()">ออกจากระบบ</button>
+ </div>
+ <div class="top"><div><h2 id="pageTitle">ลูกค้าของฉัน</h2><p id="clientLine">ค้นหา เลือก หรือสร้างลูกค้าใหม่เพื่อเริ่มวางแผน</p></div><div class="pill">AIA Planning View</div></div>
+
+ <section id="clients" class="section active">
+  <div class="grid two">
+   <div class="card">
+    <div class="head"><h3>รายชื่อลูกค้า</h3><span id="clientCount">0 ราย</span></div>
+    <div id="clientList" class="client-list"><div class="mini">ยังไม่มีข้อมูลลูกค้า</div></div>
+   </div>
+   <div class="card">
+    <div class="head"><h3>เพิ่มลูกค้าใหม่</h3><span>บันทึกเข้าบัญชีของคุณ</span></div>
+    <div class="formgrid">
+      <div class="field"><label>ชื่อ-นามสกุล</label><input id="newFullName" placeholder="ชื่อลูกค้า"></div>
+      <div class="field"><label>ชื่อเล่น</label><input id="newNickname" placeholder="ชื่อเล่น"></div>
+      <div class="field"><label>โทรศัพท์</label><input id="newPhone" placeholder="เบอร์ติดต่อ"></div>
+      <div class="field"><label>อีเมล</label><input id="newEmail" type="email" placeholder="อีเมลลูกค้า"></div>
+      <div class="field"><label>อาชีพ</label><input id="newOccupation" placeholder="อาชีพ"></div>
+      <div class="field"><label>สถานภาพ</label><select id="newMarital"><option value="">ไม่ระบุ</option><option>โสด</option><option>สมรส</option><option>หย่า/แยกกันอยู่</option><option>หม้าย</option></select></div>
+    </div>
+    <div class="actions" style="margin-top:14px"><button class="btn red" onclick="createClient()">สร้างโปรไฟล์ลูกค้า</button></div>
+    <div class="notice">หลังสร้างแล้ว ระบบจะเปิดโปรไฟล์นั้นและคุณสามารถกรอกข้อมูลการเงินในแท็บต่าง ๆ จากนั้นกด “บันทึกลูกค้าปัจจุบัน”</div>
+   </div>
+  </div>
+ </section>
+
+ <section id="dashboard" class="section">
+  <div class="card hero"><div class="hero-grid"><div><div class="pill">Priority Insight</div><h3>ภาพรวมความพร้อมทางการเงิน</h3><p id="heroMsg">เริ่มกรอกข้อมูลลูกค้า แล้วระบบจะจัดลำดับประเด็นสำคัญให้อัตโนมัติ</p></div><div><div class="big" id="healthScoreHero">0/100</div><p>Financial Health Score</p></div></div></div>
+  <div class="grid kpis" style="margin-top:16px">
+   <div class="card kpi"><div class="label">ความมั่งคั่งสุทธิ</div><div class="value" id="netWorth">฿0</div><div class="sub" id="netWorthSub">สินทรัพย์ - หนี้สิน</div></div>
+   <div class="card kpi"><div class="label">อัตราออม</div><div class="value" id="savingRate">0%</div><div class="sub">เป้าหมายขั้นต่ำจากไฟล์เดิม ≥ 10%</div></div>
+   <div class="card kpi"><div class="label">เงินสำรองฉุกเฉิน</div><div class="value" id="emergencyMonths">0 เดือน</div><div class="sub">เป้าหมาย 6 เดือนของรายจ่าย</div></div>
+   <div class="card kpi"><div class="label">Protection Gap</div><div class="value" id="protectionGap">฿0</div><div class="sub">ทุนชีวิตที่ควรพิจารณาเพิ่ม</div></div>
+  </div>
+  <div class="grid two" style="margin-top:16px">
+   <div class="card"><div class="head"><h3>สุขภาพการเงิน</h3><span>คำนวณจากตรรกะหลักใน Workbook</span></div>
+    <div class="metric"><span>การออมและลงทุน</span><b id="mSaving">0%</b></div><div class="progress"><div class="bar" id="bSaving"></div></div>
+    <div class="metric"><span>ภาระหนี้ต่อรายได้</span><b id="mDebt">0%</b></div><div class="progress"><div class="bar" id="bDebt"></div></div>
+    <div class="metric"><span>เงินสำรองฉุกเฉิน</span><b id="mEmergency">0 เดือน</b></div><div class="progress"><div class="bar" id="bEmergency"></div></div>
+    <div class="metric"><span>ความคุ้มครองชีวิต</span><b id="mProtect">0%</b></div><div class="progress"><div class="bar" id="bProtect"></div></div>
+   </div>
+   <div class="card"><div class="head"><h3>คะแนนรวม</h3><span>0–100</span></div><div class="score" id="scoreRing"><div class="score-inner"><div><b id="scoreText">0</b><br><small>คะแนน</small></div></div></div><div id="scoreLabel" style="text-align:center;font-weight:800">ยังไม่มีข้อมูล</div></div>
+  </div>
+  <div class="grid two" style="margin-top:16px">
+   <div class="card"><div class="head"><h3>โครงสร้างทรัพย์สิน & หนี้</h3><span>ภาพรวม</span></div><div class="chart"><div class="col"><div class="cbar" id="assetBar" style="height:5px"></div><label>สินทรัพย์</label></div><div class="col"><div class="cbar" id="debtBar" style="height:5px"></div><label>หนี้สิน</label></div><div class="col"><div class="cbar" id="liquidBar" style="height:5px"></div><label>สภาพคล่อง</label></div><div class="col"><div class="cbar" id="investBar" style="height:5px"></div><label>ลงทุน</label></div></div><div class="legend" id="chartLegend">กรอกข้อมูลฐานะการเงินเพื่อแสดงกราฟ</div></div>
+   <div class="card"><div class="head"><h3>สิ่งที่ควรจัดการก่อน</h3><span>Priority</span></div><div id="recommendations"></div></div>
+  </div>
+ </section>
+
+ <section id="profile" class="section">
+  <div class="card"><div class="head"><h3>ข้อมูลลูกค้า</h3><span>Basic Profile</span></div><div class="formgrid">
+   <div class="field"><label>ชื่อ-นามสกุล</label><input id="name" /></div><div class="field"><label>อายุ</label><input id="age" type="number" value="35" /></div>
+   <div class="field"><label>อายุเกษียณ</label><input id="retireAge" type="number" value="60" /></div><div class="field"><label>อายุคาดหมาย</label><input id="lifeAge" type="number" value="85" /></div>
+   <div class="field"><label>จำนวนผู้พึ่งพิง</label><input id="dependents" type="number" value="0" /></div><div class="field"><label>ระดับความเสี่ยงที่รับได้</label><select id="riskLevel"><option value="ต่ำ">ต่ำ</option><option value="ปานกลาง" selected>ปานกลาง</option><option value="สูง">สูง</option></select></div>
+   <div class="group-title">กระแสเงินสดรายเดือน</div>
+   <div class="field"><label>รายได้ต่อเดือน</label><input id="income" type="number" value="0" /></div><div class="field"><label>เงินออม/ลงทุนต่อเดือน</label><input id="saving" type="number" value="0" /></div>
+   <div class="field"><label>รายจ่ายต่อเดือน</label><input id="expense" type="number" value="0" /></div><div class="field"><label>ภาระผ่อนหนี้ต่อเดือน</label><input id="debtPay" type="number" value="0" /></div>
+   <div class="group-title">เป้าหมายและครอบครัว</div>
+   <div class="field"><label>เป้าหมายมรดก</label><input id="legacyGoal" type="number" value="0" /></div><div class="field"><label>ค่าใช้จ่ายครอบครัวต่อปี</label><input id="familyAnnual" type="number" value="0" /></div>
+   <div class="field"><label>ต้องการดูแลครอบครัวกี่ปี</label><input id="familyYears" type="number" value="3" /></div><div class="field"><label>เป้าหมายการศึกษาบุตร</label><input id="educationGoal" type="number" value="0" /></div>
+   <div class="field"><label>งบเบี้ยประกันต่อปี</label><input id="premiumBudget" type="number" value="0" /></div><div class="field"><label>มีสวัสดิการค่ารักษาพยาบาล</label><select id="healthBenefit"><option value="yes">มี</option><option value="no" selected>ไม่มี</option></select></div>
+  </div></div>
+ </section>
+
+ <section id="finance" class="section">
+  <div class="grid two"><div class="card"><div class="head"><h3>สินทรัพย์</h3><span>Assets</span></div><div class="formgrid">
+   <div class="field"><label>เงินสด / เงินฝาก</label><input id="cash" type="number" value="0" /></div><div class="field"><label>เงินลงทุนสภาพคล่องสูง</label><input id="liquidInvest" type="number" value="0" /></div>
+   <div class="field"><label>PVD / กองทุนสำรองเลี้ยงชีพ</label><input id="pvd" type="number" value="0" /></div><div class="field"><label>เงินลงทุนทั่วไป</label><input id="investments" type="number" value="0" /></div>
+   <div class="field"><label>มูลค่าเวนคืนกรมธรรม์</label><input id="cashValue" type="number" value="0" /></div><div class="field"><label>สินทรัพย์ธุรกิจ</label><input id="businessAsset" type="number" value="0" /></div>
+   <div class="field"><label>อสังหาริมทรัพย์</label><input id="property" type="number" value="0" /></div><div class="field"><label>สินทรัพย์ส่วนตัวอื่น</label><input id="personalAsset" type="number" value="0" /></div>
+  </div></div><div class="card"><div class="head"><h3>หนี้สิน & ความคุ้มครองเดิม</h3><span>Liabilities / Existing Cover</span></div><div class="formgrid">
+   <div class="field"><label>หนี้ระยะสั้น</label><input id="shortDebt" type="number" value="0" /></div><div class="field"><label>หนี้บ้าน</label><input id="homeDebt" type="number" value="0" /></div>
+   <div class="field"><label>หนี้อื่น</label><input id="otherDebt" type="number" value="0" /></div><div class="field"><label>ทุนประกันชีวิตเดิม</label><input id="lifeCover" type="number" value="0" /></div>
+   <div class="field"><label>ประกันคุ้มครองสินเชื่อ</label><input id="mortgageCover" type="number" value="0" /></div><div class="field"><label>สิทธิประกันสังคม/อื่น ๆ</label><input id="socialCover" type="number" value="0" /></div>
+  </div></div></div>
+ </section>
+
+ <section id="risk" class="section"><div class="grid two"><div class="card"><div class="head"><h3>Life Protection Need</h3><span>Gap Analysis</span></div><table class="table"><tbody>
+   <tr><td>หนี้ทั้งหมด</td><td id="rDebt">฿0</td></tr><tr><td>ค่าใช้จ่ายครอบครัว</td><td id="rFamily">฿0</td></tr><tr><td>การศึกษาบุตร</td><td id="rEdu">฿0</td></tr><tr><td>มรดก</td><td id="rLegacy">฿0</td></tr><tr><td>เงินฉุกเฉินเพิ่มเติม</td><td>฿100,000</td></tr><tr><th>ทุนชีวิตที่ควรมี</th><th id="rNeed">฿0</th></tr><tr><td>ทรัพย์สิน/ทุนชีวิตที่ใช้รองรับ</td><td id="rExisting">฿0</td></tr><tr><th>Protection Gap</th><th id="rGap">฿0</th></tr>
+  </tbody></table></div><div class="card"><div class="head"><h3>AIA Product Recommendation</h3><span>Product + Why</span></div><div id="solutionMap"></div><div class="notice">คำแนะนำนี้เป็น Needs-based Recommendation เบื้องต้น ต้องตรวจอายุรับประกัน สุขภาพ อาชีพ งบเบี้ย ผลประโยชน์ เงื่อนไข และเอกสารผลิตภัณฑ์ฉบับปัจจุบันก่อนเสนอขายทุกครั้ง</div></div></div></section>
+
+ <section id="retire" class="section"><div class="grid kpis"><div class="card kpi"><div class="label">รายจ่ายเดือนแรกหลังเกษียณ</div><div class="value" id="retireFutureExp">฿0</div></div><div class="card kpi"><div class="label">เงินเป้าหมายเกษียณ</div><div class="value" id="retireTarget">฿0</div></div><div class="card kpi"><div class="label">Retirement Gap</div><div class="value" id="retireGap">฿0</div></div><div class="card kpi"><div class="label">ควรลงทุนเพิ่ม/เดือน</div><div class="value" id="retireMonthly">฿0</div></div></div><div class="card" style="margin-top:16px"><div class="formgrid"><div class="field"><label>ค่าใช้จ่ายที่ต้องการหลังเกษียณ/เดือน (ราคาปัจจุบัน)</label><input id="retireExpense" type="number" value="0" /></div><div class="field"><label>เงินเฟ้อ %</label><input id="inflation" type="number" step="0.1" value="2" /></div><div class="field"><label>รายได้ประจำหลังเกษียณ/เดือน</label><input id="retireIncome" type="number" value="0" /></div><div class="field"><label>เงินเกษียณที่มีแล้ว</label><input id="retireAssets" type="number" value="0" /></div><div class="field"><label>ผลตอบแทนคาดหวัง %/ปี</label><input id="returnRate" type="number" step="0.1" value="5" /></div></div></div></section>
+
+ <section id="tax" class="section"><div class="grid two"><div class="card"><div class="head"><h3>ประมาณการภาษี</h3><span>แบบง่าย</span></div><div class="formgrid"><div class="field"><label>รายได้ทั้งปี</label><input id="annualIncome" type="number" value="0" /></div><div class="field"><label>ค่าใช้จ่ายตามประเภทเงินได้</label><input id="taxExpenseDed" type="number" value="0" /></div><div class="field"><label>ค่าลดหย่อนทั่วไป</label><input id="taxAllowance" type="number" value="60000" /></div><div class="field"><label>ค่าลดหย่อนเพิ่มเติม เช่น ประกัน/กองทุน</label><input id="extraTaxDed" type="number" value="0" /></div></div></div><div class="card"><div class="head"><h3>Tax Snapshot</h3><span>เพื่อใช้ชวนวางแผนต่อ</span></div><div class="kpi"><div class="label">เงินได้สุทธิประมาณการ</div><div class="value" id="taxNet">฿0</div></div><div class="kpi"><div class="label">ภาษีประมาณการ</div><div class="value" id="taxDue">฿0</div></div><div class="kpi"><div class="label">ภาษีที่ลดลงจาก deduction เพิ่มเติม</div><div class="value ok" id="taxSaved">฿0</div></div><div class="notice">ส่วนนี้เป็นตัวประมาณเพื่อการวางแผนเท่านั้น ต้องตรวจเงื่อนไขค่าลดหย่อนและกฎหมายภาษีในปีภาษีนั้นก่อนใช้จริง</div></div></div></section>
+
+ 
+</main></div>
+<script>
+const $=id=>document.getElementById(id);const fmt=x=>'฿'+Math.round(Number(x||0)).toLocaleString('th-TH');const pct=x=>(Number(x||0)).toFixed(1)+'%';const n=id=>Number($(id)?.value||0);
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));$(b.dataset.tab).classList.add('active');$('pageTitle').textContent=b.textContent});document.querySelectorAll('input,select').forEach(x=>x.addEventListener('input',calcAll));
+function taxCalc(x){let tax=0,prev=0;[[150000,0],[300000,.05],[500000,.1],[750000,.15],[1000000,.2],[2000000,.25],[5000000,.3],[Infinity,.35]].forEach(([cap,r])=>{if(x>prev){const amt=Math.min(x,cap)-prev;if(amt>0)tax+=amt*r}prev=cap});return tax}
+function calcAll(){
+ const income=n('income'),saving=n('saving'),expense=n('expense'),debtPay=n('debtPay');
+ const liquid=n('cash')+n('liquidInvest'),invest=n('pvd')+n('investments')+n('cashValue')+n('businessAsset'),personal=n('property')+n('personalAsset');
+ const assets=liquid+invest+personal,debt=n('shortDebt')+n('homeDebt')+n('otherDebt'),net=assets-debt;
+ const savingRate=income?100*saving/income:0,debtRatio=income?100*debtPay/income:0,emMonths=expense?liquid/expense:0;
+ const family=n('familyAnnual')*n('familyYears'),need=debt+family+n('educationGoal')+n('legacyGoal')+100000,existing=liquid+n('lifeCover')+n('mortgageCover')+n('socialCover'),gap=Math.max(0,need-existing),coverPct=need?Math.min(100,100*existing/need):100;
+ $('netWorth').textContent=fmt(net);$('netWorth').className='value '+(net>=0?'ok':'bad');$('savingRate').textContent=pct(savingRate);$('emergencyMonths').textContent=emMonths.toFixed(1)+' เดือน';$('protectionGap').textContent=fmt(gap);
+ $('mSaving').textContent=pct(savingRate);$('mDebt').textContent=pct(debtRatio);$('mEmergency').textContent=emMonths.toFixed(1)+' เดือน';$('mProtect').textContent=pct(coverPct);
+ $('bSaving').style.width=Math.min(100,savingRate/10*100)+'%';$('bDebt').style.width=Math.min(100,debtRatio/50*100)+'%';$('bDebt').style.background=debtRatio<=50?'linear-gradient(90deg,#25a56c,#7bd3aa)':'linear-gradient(90deg,#f59e0b,#dc2626)';$('bEmergency').style.width=Math.min(100,emMonths/6*100)+'%';$('bProtect').style.width=Math.min(100,coverPct)+'%';
+ const s1=Math.min(100,savingRate/10*100),s2=Math.max(0,100-(Math.max(0,debtRatio-20)/30*100)),s3=Math.min(100,emMonths/6*100),s4=coverPct;const score=Math.round((s1+s2+s3+s4)/4);
+ $('scoreText').textContent=score;$('healthScoreHero').textContent=score+'/100';$('scoreRing').style.background=`conic-gradient(var(--red) ${score*3.6}deg,#e5e7eb 0deg)`;$('scoreLabel').textContent=score>=80?'แข็งแรงมาก':score>=65?'ค่อนข้างดี':score>=45?'ควรปรับบางจุด':'มีประเด็นสำคัญที่ควรเร่งจัดการ';
+ const max=Math.max(assets,debt,liquid,invest,1);[['assetBar',assets],['debtBar',debt],['liquidBar',liquid],['investBar',invest]].forEach(([id,v])=>$(id).style.height=(20+180*v/max)+'px');$('chartLegend').textContent=`สินทรัพย์ ${fmt(assets)} | หนี้ ${fmt(debt)} | สภาพคล่อง ${fmt(liquid)}`;
+ $('rDebt').textContent=fmt(debt);$('rFamily').textContent=fmt(family);$('rEdu').textContent=fmt(n('educationGoal'));$('rLegacy').textContent=fmt(n('legacyGoal'));$('rNeed').textContent=fmt(need);$('rExisting').textContent=fmt(existing);$('rGap').textContent=fmt(gap);
+ const rec=[];if(emMonths<6)rec.push({p:'สูง',t:'เงินสำรองฉุกเฉินยังไม่ถึง 6 เดือน',d:`ปัจจุบันประมาณ ${emMonths.toFixed(1)} เดือน ควรเพิ่มสภาพคล่องก่อนเพิ่มภาระเบี้ยระยะยาว`});if(debtRatio>50)rec.push({p:'สูง',t:'ภาระหนี้สูง',d:`ยอดผ่อนประมาณ ${pct(debtRatio)} ของรายได้ ควรจัดลำดับชำระหนี้และคุมเบี้ยให้เหมาะกับกระแสเงินสด`});if(gap>0)rec.push({p:'สูง',t:'ทุนประกันชีวิตยังมีช่องว่าง',d:`Protection Gap ประมาณ ${fmt(gap)} เพื่อรองรับหนี้ ภาระครอบครัว การศึกษา และมรดก`});if($('healthBenefit').value==='no')rec.push({p:'กลาง',t:'ยังไม่มีสวัสดิการค่ารักษาพยาบาล',d:'ควรประเมินวงเงินค่ารักษา IPD/เหมาจ่าย และความเสี่ยงโรคร้ายแรงก่อน'});if(savingRate<10)rec.push({p:'กลาง',t:'อัตราออมต่ำกว่าเป้าหมาย',d:`ปัจจุบัน ${pct(savingRate)} ควรสร้างระบบออมก่อนลงทุนระยะยาว`});if(!rec.length)rec.push({p:'ดี',t:'ฐานการเงินเบื้องต้นอยู่ในเกณฑ์ดี',d:'ขั้นต่อไปคือทบทวนคุณภาพความคุ้มครองจริง รายละเอียดกรมธรรม์ และเป้าหมายเกษียณ/มรดก'});
+ $('recommendations').innerHTML=rec.map(x=>`<div class="rec"><span class="tag ${x.p==='สูง'?'high':x.p==='กลาง'?'mid':'good'}">${x.p}</span><strong>${x.t}</strong><small>${x.d}</small></div>`).join('');
+ $('heroMsg').textContent=rec[0].t+' — '+rec[0].d;
+ const products=[];
+ const ageNow=n('age'), budget=n('premiumBudget'), noHealth=$('healthBenefit').value==='no';
+ if(gap>0){
+   if(ageNow>=18 && ageNow<=60){products.push({p:'สูง',cat:'Life Protection',name:'AIA Life Protector 70',why:`มี Protection Gap ${fmt(gap)} และแบบนี้เน้นความคุ้มครองชีวิตถึงอายุ 70 ปี จึงเหมาะใช้เป็นตัวเลือกแรกเมื่อเป้าหมายหลักคือสร้างหลักประกันให้ครอบครัว`,fit:'เหมาะเมื่อ: ต้องการเน้นทุนชีวิตและช่วงคุ้มครองถึงวัยเกษียณ โดยยังต้องเทียบเบี้ยกับงบจริง'});}
+   products.push({p:'สูง',cat:'Life Protection',name:'AIA Pay Life Plus 10/15/20',why:`Protection Gap ยังเหลือ ${fmt(gap)} และแบบนี้ให้ความคุ้มครองตลอดชีพถึงอายุ 99 ปี พร้อมเลือกระยะชำระเบี้ย 10/15/20 ปี จึงเหมาะเมื่ออยากล็อกช่วงจ่ายเบี้ยและส่งต่อความคุ้มครองระยะยาว`,fit:'เหมาะเมื่อ: ต้องการความคุ้มครองตลอดชีพ/มรดก และกระแสเงินสดรองรับเบี้ยตามระยะที่เลือก'});
+ }
+ if(noHealth || budget>0){products.push({p:noHealth?'สูง':'กลาง',cat:'Medical',name:'AIA Health Happy',why:noHealth?'ยังไม่มีสวัสดิการค่ารักษาพยาบาล ระบบจึงให้ความสำคัญกับความคุ้มครองสุขภาพก่อน โดย Health Happy เป็นแบบเหมาจ่ายที่มีหลายวงเงินและคุ้มครองสูงสุดตามแผน':'มีงบสำหรับประกัน ควรตรวจว่าความคุ้มครองสุขภาพเดิมมีช่องว่างหรือไม่ ก่อนเพิ่มการลงทุนระยะยาว',fit:'เหมาะเมื่อ: ต้องการลดความเสี่ยงค่ารักษาก้อนใหญ่ และต้องเลือกวงเงิน/ค่าห้องให้สอดคล้องโรงพยาบาลที่ใช้จริง'});}
+ products.push({p:'กลาง',cat:'Critical Illness',name:'AIA CI Plus + AIA CI Top Up',why:'ค่ารักษาพยาบาลไม่ได้ทดแทนรายได้ที่หายไปทั้งหมด การมีเงินก้อนโรคร้ายแรงช่วยรองรับค่าใช้จ่ายนอกโรงพยาบาล การพักงาน และการฟื้นตัว; CI Top Up ใช้เติมความคุ้มครองโรคร้ายระยะต้น-กลางเมื่อแนบกับ CI Plus',fit:'เหมาะเมื่อ: ลูกค้ามีภาระครอบครัว รายได้หลักมาจากการทำงาน หรือมีเงินสำรองไม่มาก'});
+ if(n('retireAge')>ageNow){
+   if(ageNow>=20 && ageNow<=55){products.push({p:'กลาง',cat:'Retirement',name:'AIA Annuity Fix',why:'มีเป้าหมายเกษียณและต้องการสร้างกระแสเงินสดประจำหลังอายุ 60 แบบบำนาญจึงเหมาะกับส่วนเงินที่ต้องการความแน่นอนมากกว่าความผันผวนของการลงทุน',fit:'เหมาะเมื่อ: ต้องการรายได้บำนาญที่กำหนดไว้ และยอมรับสภาพคล่องที่ต่ำกว่าการลงทุนทั่วไป'});}
+   products.push({p:'กลาง',cat:'Retirement / Wealth',name:'AIA Issara Plus / AIA Smart Select',why:'หากเป้าหมายเกษียณต้องการทั้งความคุ้มครองชีวิตและโอกาสเติบโตของเงินลงทุน Unit Linked ให้ความยืดหยุ่นในการปรับแผนตามช่วงชีวิต แต่ต้องรับความเสี่ยงการลงทุนและค่าใช้จ่ายของกรมธรรม์ได้',fit:'เหมาะเมื่อ: มีเงินสำรองเพียงพอ รับความผันผวนได้ และลงทุนระยะยาว'});
+ }
+ if(n('legacyGoal')>0){products.push({p:'กลาง',cat:'Legacy / HNW',name:'AIA Prestige / High Net Worth',why:`มีเป้าหมายมรดก ${fmt(n('legacyGoal'))} ระบบจึงเสนอให้พิจารณากลุ่ม Prestige เพื่อจัดโครงสร้างสภาพคล่องและการส่งต่อทรัพย์สิน โดยต้องวิเคราะห์สินทรัพย์ หนี้ ภาษี และผู้รับผลประโยชน์เพิ่มเติม`,fit:'เหมาะเมื่อ: มีสินทรัพย์สูง ต้องการวางแผนส่งต่อมรดกหรือสภาพคล่องระยะยาว'});}
+ if(!products.length){products.push({p:'ดี',cat:'Review',name:'ทบทวนกรมธรรม์เดิมก่อนซื้อเพิ่ม',why:'ข้อมูลปัจจุบันยังไม่พบ Gap เด่นที่จำเป็นต้องเพิ่มผลิตภัณฑ์ทันที ควรตรวจวงเงิน เงื่อนไข ข้อยกเว้น และเป้าหมายก่อนเสนอขายเพิ่มเติม',fit:'เหมาะเมื่อ: ฐานการเงินและความคุ้มครองปัจจุบันอยู่ในเกณฑ์เพียงพอ'});}
+ $('solutionMap').innerHTML=products.map(x=>`<div class="prod"><div class="prod-top"><div><span class="tag ${x.p==='สูง'?'high':x.p==='กลาง'?'mid':'good'}">${x.p}</span><span class="tag">${x.cat}</span><h4>${x.name}</h4></div></div><div class="why"><span class="reason">เหตุผลที่ระบบแนะนำ:</span> ${x.why}</div><div class="fit">${x.fit}</div></div>`).join('');
+ const age=n('age'),ra=n('retireAge'),la=n('lifeAge'),yrs=Math.max(0,ra-age),retYrs=Math.max(0,la-ra),inf=n('inflation')/100,rr=n('returnRate')/100;const futExp=n('retireExpense')*Math.pow(1+inf,yrs),monthlyShort=Math.max(0,futExp-n('retireIncome')),target=monthlyShort*12*retYrs,rgap=Math.max(0,target-n('retireAssets'));let monthly=0;if(yrs>0&&rgap>0){const rm=Math.pow(1+rr,1/12)-1,N=yrs*12;monthly=rm>0?rgap*rm/(Math.pow(1+rm,N)-1):rgap/N}
+ $('retireFutureExp').textContent=fmt(futExp)+'/เดือน';$('retireTarget').textContent=fmt(target);$('retireGap').textContent=fmt(rgap);$('retireMonthly').textContent=fmt(monthly)+'/เดือน';
+ const gross=n('annualIncome'),ded=n('taxExpenseDed'),allow=n('taxAllowance'),extra=n('extraTaxDed'),netTax=Math.max(0,gross-ded-allow-extra),baseNet=Math.max(0,gross-ded-allow),tax=taxCalc(netTax),baseTax=taxCalc(baseNet);$('taxNet').textContent=fmt(netTax);$('taxDue').textContent=fmt(tax);$('taxSaved').textContent=fmt(Math.max(0,baseTax-tax));
+ const nm=$('name').value.trim();$('clientLine').textContent=nm?`${nm} • อายุ ${age||'-'} ปี • เป้าหมายเกษียณ ${ra||'-'} ปี`:'กรอกข้อมูลเพื่อสร้าง Financial Health Check และ Protection Plan';
+}
+function resetDemo(){document.querySelectorAll('input[type=number]').forEach(x=>x.value=0);$('age').value=35;$('retireAge').value=60;$('lifeAge').value=85;$('familyYears').value=3;$('inflation').value=2;$('returnRate').value=5;$('name').value='';calcAll()}
+calcAll();
+
+// ===== AIA Financial Planner V2: Supabase cloud data =====
+const SUPABASE_URL='https://tlmbwvtxsxdlxkcmropp.supabase.co';
+const SUPABASE_KEY='sb_publishable_L8dg3t06sHUc_1StXBuMKg_Nx4S6Wrs';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentClientId=null;
+const plannerIds=['name','age','retireAge','lifeAge','dependents','riskLevel','income','saving','expense','debtPay','legacyGoal','familyAnnual','familyYears','educationGoal','premiumBudget','healthBenefit','cash','liquidInvest','pvd','investments','cashValue','businessAsset','property','personalAsset','shortDebt','homeDebt','otherDebt','lifeCover','mortgageCover','socialCover','retireExpense','inflation','retireIncome','retireAssets','returnRate','annualIncome','taxExpenseDed','taxAllowance','extraTaxDed'];
+function toast(msg){const t=$('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2600)}
+function snapshotPlanner(){const o={};plannerIds.forEach(id=>{const el=$(id);if(el)o[id]=el.value});return o}
+function restorePlanner(o={}){plannerIds.forEach(id=>{const el=$(id);if(el && Object.prototype.hasOwnProperty.call(o,id))el.value=o[id]});calcAll()}
+async function loginUser(){const email=$('authEmail').value.trim(),password=$('authPassword').value;const {error}=await sb.auth.signInWithPassword({email,password});$('authStatus').textContent=error?error.message:'เข้าสู่ระบบสำเร็จ';if(!error) await bootCloud()}
+async function signupUser(){const email=$('authEmail').value.trim(),password=$('authPassword').value;if(password.length<6){$('authStatus').textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัว';return}const {data,error}=await sb.auth.signUp({email,password});if(error){$('authStatus').textContent=error.message;return}$('authStatus').textContent=data.session?'สมัครสำเร็จและเข้าสู่ระบบแล้ว':'สมัครสำเร็จ กรุณาตรวจอีเมลเพื่อยืนยันบัญชี แล้วกลับมาเข้าสู่ระบบ';if(data.session)await bootCloud()}
+async function logoutUser(){await sb.auth.signOut();currentClientId=null;$('authOverlay').style.display='grid'}
+async function bootCloud(){const {data:{user}}=await sb.auth.getUser();if(!user){$('authOverlay').style.display='grid';return}$('authOverlay').style.display='none';$('currentUserLabel').textContent=user.email||'';await loadClients()}
+async function loadClients(){const {data,error}=await sb.from('clients').select('id,full_name,nickname,phone,email,occupation,updated_at,created_at').order('updated_at',{ascending:false});if(error){toast('โหลดรายชื่อลูกค้าไม่สำเร็จ: '+error.message);return}$('clientCount').textContent=(data?.length||0)+' ราย';$('clientList').innerHTML=(data&&data.length)?data.map(c=>`<div class="client-item ${c.id===currentClientId?'active':''}" onclick="openClient('${c.id}')"><div><b>${escapeHtml(c.full_name)}</b>${c.nickname?` <span class="mini">(${escapeHtml(c.nickname)})</span>`:''}<div class="client-meta">${escapeHtml(c.phone||c.email||c.occupation||'ยังไม่มีข้อมูลติดต่อ')}</div></div><span class="tag">เปิด</span></div>`).join(''):'<div class="mini">ยังไม่มีข้อมูลลูกค้า</div>'}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+async function createClient(){const full_name=$('newFullName').value.trim();if(!full_name){toast('กรุณากรอกชื่อลูกค้า');return}const row={full_name,nickname:$('newNickname').value.trim()||null,phone:$('newPhone').value.trim()||null,email:$('newEmail').value.trim()||null,occupation:$('newOccupation').value.trim()||null,marital_status:$('newMarital').value||null,dependents:0};const {data,error}=await sb.from('clients').insert(row).select().single();if(error){toast('สร้างลูกค้าไม่สำเร็จ: '+error.message);return}currentClientId=data.id;resetDemo();$('name').value=data.full_name;['newFullName','newNickname','newPhone','newEmail','newOccupation'].forEach(id=>$(id).value='');$('newMarital').value='';await sb.from('financial_profiles').upsert({client_id:data.id,planner_data:snapshotPlanner(),risk_level:$('riskLevel').value});await loadClients();document.querySelector('[data-tab="profile"]').click();toast('สร้างโปรไฟล์ลูกค้าแล้ว')}
+async function openClient(id){currentClientId=id;const [{data:c,error:ce},{data:f,error:fe}]=await Promise.all([sb.from('clients').select('*').eq('id',id).single(),sb.from('financial_profiles').select('*').eq('client_id',id).maybeSingle()]);if(ce){toast('เปิดลูกค้าไม่สำเร็จ');return}resetDemo();if(f?.planner_data)restorePlanner(f.planner_data);$('name').value=c.full_name||'';$('dependents').value=c.dependents??$('dependents').value;calcAll();await loadClients();document.querySelector('[data-tab="dashboard"]').click();toast('เปิดข้อมูล '+c.full_name)}
+async function saveCurrentClient(){const {data:{user}}=await sb.auth.getUser();if(!user){toast('กรุณาเข้าสู่ระบบ');return}if(!currentClientId){const nm=$('name').value.trim();if(!nm){toast('กรุณาเลือกหรือสร้างลูกค้าก่อน');document.querySelector('[data-tab="clients"]').click();return}const {data,error}=await sb.from('clients').insert({full_name:nm,dependents:Number($('dependents').value||0)}).select().single();if(error){toast(error.message);return}currentClientId=data.id}const snap=snapshotPlanner();const income=Number(snap.income||0),expense=Number(snap.expense||0),debtPay=Number(snap.debtPay||0);const totalAssets=['cash','liquidInvest','pvd','investments','cashValue','businessAsset','property','personalAsset'].reduce((a,id)=>a+Number(snap[id]||0),0);const totalLiabilities=['shortDebt','homeDebt','otherDebt'].reduce((a,id)=>a+Number(snap[id]||0),0);const {error:e1}=await sb.from('clients').update({full_name:snap.name||'ไม่ระบุชื่อ',dependents:Number(snap.dependents||0)}).eq('id',currentClientId);if(e1){toast('บันทึกข้อมูลลูกค้าไม่สำเร็จ: '+e1.message);return}const payload={client_id:currentClientId,monthly_income:income,monthly_expenses:expense,monthly_debt_payment:debtPay,emergency_cash:Number(snap.cash||0)+Number(snap.liquidInvest||0),total_assets:totalAssets,total_liabilities:totalLiabilities,current_life_cover:Number(snap.lifeCover||0),retirement_savings:Number(snap.retireAssets||0),target_retirement_age:Number(snap.retireAge||0)||null,target_retirement_fund:0,risk_level:snap.riskLevel||null,planner_data:snap};const {error:e2}=await sb.from('financial_profiles').upsert(payload,{onConflict:'client_id'});if(e2){toast('บันทึกแผนการเงินไม่สำเร็จ: '+e2.message);return}await loadClients();toast('บันทึกข้อมูลลูกค้าเรียบร้อย')}
+function newClient(){currentClientId=null;resetDemo();document.querySelector('[data-tab="clients"]').click();loadClients()}
+sb.auth.onAuthStateChange((_event,session)=>{if(session?.user){$('authOverlay').style.display='none';$('currentUserLabel').textContent=session.user.email||''}else $('authOverlay').style.display='grid'});
+bootCloud();
+</script>
+<script src="./v21.js?v=20260820"></script><script src="./v22-auth.js?v=20260820b"></script><script src="./authfix.js?v=20260820c"></script><script src="./v23-tax.js?v=20260820d"></script><script src="./v24-open-client-fix.js?v=20260820e"></script><script src="./v25-client-management.js?v=20260820f"></script><script src="./v26-number-input.js?v=20260820g"></script><script src="./v27-commercial.js?v=20260820h"></script><script>(() => {
+  'use strict';
+
+  const VERSION = '28.4.0';
+  const ROOT_ID = 'policy-portfolio-v28';
+  const STYLE_ID = 'policy-portfolio-v28-style';
+  const STORAGE_BUCKET = 'policy-documents';
+  const AIA_RED = '#d31145';
+
+  const state = {
+    policies: [],
+    client: null,
+    familyMembers: [],
+    filter: 'all',
+    editingId: null,
+    pendingFile: null,
+    objectUrl: null,
+  };
+
+  function getDb() {
+    const candidates = [];
+    try { if (typeof supabaseClient !== 'undefined') candidates.push(supabaseClient); } catch (_) {}
+    try { if (typeof sb !== 'undefined') candidates.push(sb); } catch (_) {}
+    try { if (typeof db !== 'undefined') candidates.push(db); } catch (_) {}
+    try { if (typeof supabase !== 'undefined') candidates.push(supabase); } catch (_) {}
+    candidates.push(window.supabaseClient, window.sb, window.db, window._supabase);
+    return candidates.find(x => x && typeof x.from === 'function') || null;
+  }
+
+  function getCurrentClientId() {
+    try { if (typeof currentClientId !== 'undefined' && currentClientId) return currentClientId; } catch (_) {}
+    return window.currentClientId || window.selectedClientId || null;
+  }
+
+  function money(n) {
+    const v = Number(n || 0);
+    return new Intl.NumberFormat('th-TH', { maximumFractionDigits: 0 }).format(v);
+  }
+
+  function esc(s) {
+    return String(s ?? '').replace(/[&<>"']/g, m => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+    }[m]));
+  }
+
+  function safeFileName(name) {
+    return String(name || 'document')
+      .normalize('NFKD')
+      .replace(/[^\w.\-ก-๙]+/g, '_')
+      .slice(-120);
+  }
+
+  function toast(msg, type='ok') {
+    let el = document.getElementById('pp28-toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'pp28-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.className = 'pp28-toast show ' + type;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  function installStyles() {
+    if (document.getElementById(STYLE_ID)) return;
+    const s = document.createElement('style');
+    s.id = STYLE_ID;
+    s.textContent = `
+      :root{--pp-red:${AIA_RED};--pp-ink:#202733;--pp-muted:#77808f;--pp-bg:#f5f6f8;--pp-card:#fff;--pp-line:#e7e9ee}
+      #${ROOT_ID}{position:fixed;inset:0;z-index:9998;background:var(--pp-bg);overflow:auto;font-family:inherit;color:var(--pp-ink)}
+      #${ROOT_ID} *{box-sizing:border-box}
+      .pp28-shell{max-width:1080px;margin:auto;min-height:100vh;padding-bottom:92px}
+      .pp28-top{position:sticky;top:0;z-index:4;background:rgba(255,255,255,.97);border-bottom:1px solid #eceef2;padding:12px 16px}
+      .pp28-topline{display:flex;gap:12px;align-items:center;justify-content:space-between}
+      .pp28-brand{display:flex;align-items:center;gap:10px;min-width:0}
+      .pp28-back{border:0;background:#fff;width:42px;height:42px;border-radius:50%;font-size:24px;cursor:pointer}
+      .pp28-logo{width:45px;height:45px;background:var(--pp-red);color:#fff;border-radius:13px;display:grid;place-items:center;font:700 25px Georgia,serif}
+      .pp28-brand h2{font-size:19px;margin:0;line-height:1.2}
+      .pp28-brand small{color:var(--pp-muted)}
+      .pp28-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+      .pp28-btn{border:1px solid #e0e3e9;background:#fff;color:var(--pp-ink);border-radius:12px;padding:10px 13px;font-weight:700;cursor:pointer;font-size:14px}
+      .pp28-btn.red{background:var(--pp-red);border-color:var(--pp-red);color:#fff}
+      .pp28-btn.soft{background:#fff4f7;color:var(--pp-red);border-color:#ffd7e1}
+      .pp28-main{padding:18px 16px}
+      .pp28-hero{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;align-items:end;margin-bottom:16px}
+      .pp28-eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;color:#7a8290}
+      .pp28-title{font-size:31px;margin:6px 0 5px;line-height:1.15}
+      .pp28-sub{color:#7a8290;line-height:1.55}
+      .pp28-select{width:100%;padding:12px 14px;border:1px solid #e1e4ea;border-radius:12px;background:#fff;font-weight:700}
+      .pp28-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+      .pp28-stat{background:#fff;border:1px solid #eaecf0;border-radius:18px;padding:18px;min-height:130px;box-shadow:0 4px 18px rgba(24,31,42,.035)}
+      .pp28-stat.redtop{border-top:4px solid var(--pp-red)}
+      .pp28-label{color:#7b8492;font-size:13px}
+      .pp28-value{font-weight:800;font-size:30px;margin-top:14px}
+      .pp28-unit{color:#7b8492;margin-top:8px;font-size:13px}
+      .pp28-card{background:#fff;border:1px solid #eaecf0;border-radius:18px;padding:18px;margin-top:14px;box-shadow:0 4px 18px rgba(24,31,42,.035)}
+      .pp28-cardhead{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:12px}
+      .pp28-card h3{margin:0;font-size:18px}
+      .pp28-card p{margin:4px 0 0;color:#7c8593;font-size:13px}
+      .pp28-mini4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+      .pp28-mini{border-radius:13px;padding:13px;border:1px solid #eee}
+      .pp28-mini:nth-child(1){background:#fff5f7;border-color:#ffdce4}
+      .pp28-mini:nth-child(2){background:#fff9ef;border-color:#ffe7ba}
+      .pp28-mini:nth-child(3){background:#effaf5;border-color:#ccefe0}
+      .pp28-mini:nth-child(4){background:#f4f6ff;border-color:#dce2ff}
+      .pp28-mini b{display:block;font-size:18px;margin-top:4px}
+      .pp28-chart{width:100%;height:230px;overflow:hidden;margin-top:12px}
+      .pp28-chart svg{width:100%;height:100%}
+      .pp28-tablewrap{overflow:auto}
+      .pp28-table{width:100%;border-collapse:collapse;min-width:850px}
+      .pp28-table th,.pp28-table td{padding:11px 9px;border-bottom:1px solid #eef0f4;text-align:left;font-size:13px;vertical-align:top}
+      .pp28-table th{color:#717b89;font-size:12px}
+      .pp28-pill{display:inline-flex;border-radius:999px;padding:4px 8px;background:#f4f5f7;font-size:11px;font-weight:700}
+      .pp28-pill.active{background:#eaf8f0;color:#16814a}
+      .pp28-linkbtn{border:0;background:transparent;color:var(--pp-red);font-weight:800;cursor:pointer;padding:4px}
+      .pp28-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+      .pp28-donutrow{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+      .pp28-donut{width:165px;height:165px;border-radius:50%;display:grid;place-items:center;position:relative}
+      .pp28-donut:after{content:"";width:98px;height:98px;background:#fff;border-radius:50%;position:absolute}
+      .pp28-donutcenter{position:absolute;z-index:1;text-align:center;font-weight:800}
+      .pp28-legend{flex:1;min-width:210px}
+      .pp28-legendrow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f1f4;font-size:13px}
+      .pp28-empty{text-align:center;padding:28px;color:#8a929e}
+      .pp28-modalback{position:fixed;inset:0;z-index:10020;background:rgba(18,23,31,.48);display:grid;place-items:end center;padding:0}
+      .pp28-modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px}
+      .pp28-modal h3{margin:0 0 4px}
+      .pp28-formgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+      .pp28-field{display:flex;flex-direction:column;gap:5px}
+      .pp28-field.full{grid-column:1/-1}
+      .pp28-field label{font-size:12px;font-weight:800;color:#697281}
+      .pp28-field input,.pp28-field select{width:100%;border:1px solid #dfe3ea;border-radius:11px;padding:11px;font-size:16px;background:#fff}
+      .pp28-modalactions{display:flex;gap:9px;justify-content:flex-end;position:sticky;bottom:-18px;background:#fff;padding:14px 0 4px;margin-top:12px}
+      .pp28-preview{border:1px dashed #d9dde5;border-radius:14px;padding:12px;background:#fafbfc}
+      .pp28-preview img{max-width:100%;max-height:280px;border-radius:10px;display:block;margin:auto}
+      .pp28-filetag{display:flex;justify-content:space-between;gap:12px;align-items:center}
+      .pp28-floating{position:fixed;right:18px;bottom:18px;z-index:9999;display:flex;gap:8px}
+      .pp28-toast{position:fixed;z-index:10080;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#202733;color:#fff;border-radius:12px;padding:11px 16px;transition:.2s;pointer-events:none;max-width:90vw;text-align:center}
+      .pp28-toast.show{opacity:1;transform:translate(-50%,0)}
+      .pp28-toast.err{background:#a81633}
+      @media(max-width:800px){
+        .pp28-topline{align-items:flex-start}.pp28-actions{max-width:52%}
+        .pp28-btn{padding:9px 10px;font-size:12px}
+        .pp28-hero{grid-template-columns:1fr}.pp28-title{font-size:28px}
+        .pp28-grid4{grid-template-columns:1fr 1fr}
+        .pp28-mini4{grid-template-columns:1fr 1fr}
+        .pp28-two{grid-template-columns:1fr}
+      }
+      @media(max-width:480px){
+        .pp28-brand small{display:none}.pp28-brand h2{font-size:16px}
+        .pp28-logo{width:40px;height:40px}.pp28-back{width:34px;height:34px}
+        .pp28-actions{max-width:55%;gap:5px}.pp28-actions .pp28-btn{font-size:11px;padding:8px}
+        .pp28-main{padding:15px 12px}.pp28-grid4{gap:8px}.pp28-stat{padding:15px;min-height:118px}
+        .pp28-value{font-size:25px}.pp28-formgrid{grid-template-columns:1fr}
+      }
+      @media print{
+        body>*:not(#${ROOT_ID}){display:none!important}
+        #${ROOT_ID}{position:static!important;overflow:visible!important;background:#fff}
+        .pp28-top,.pp28-floating,.pp28-btn,.pp28-linkbtn{display:none!important}
+        .pp28-shell{max-width:none;padding:0}.pp28-main{padding:0}
+        .pp28-card,.pp28-stat{break-inside:avoid;box-shadow:none}
+      }
+    `;
+    document.head.appendChild(s);
+  }
+
+  async function loadClientAndPolicies() {
+    const dbx = getDb();
+    const clientId = getCurrentClientId();
+    if (!dbx) throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
+    if (!clientId) throw new Error('กรุณาเลือกลูกค้าก่อนเปิดเมนูกรมธรรม์');
+
+    const [cRes, pRes, fRes] = await Promise.all([
+      dbx.from('clients').select('*').eq('id', clientId).maybeSingle(),
+      dbx.from('insurance_policies').select('*').eq('client_id', clientId).order('created_at', { ascending: false }),
+      dbx.from('family_members').select('*').eq('client_id', clientId).order('created_at', { ascending: true })
+    ]);
+    if (cRes.error) throw cRes.error;
+    if (pRes.error) throw pRes.error;
+    if (fRes.error) throw fRes.error;
+    state.client = cRes.data || { id: clientId };
+    state.policies = pRes.data || [];
+    state.familyMembers = fRes.data || [];
+  }
+
+  function filteredPolicies() {
+    if (state.filter === 'all') return state.policies;
+    return state.policies.filter(p => (p.insured_name || state.client?.full_name || '') === state.filter);
+  }
+
+  function summary(list=filteredPolicies()) {
+    const active = list.filter(p => (p.policy_status || 'active') !== 'cancelled');
+    const unique = new Set(active.map(p => p.insured_name).filter(Boolean));
+    return {
+      count: active.length,
+      sumAssured: active.reduce((a,p)=>a+Number(p.sum_assured||0),0),
+      premium: active.reduce((a,p)=>a+Number(p.annual_premium||0),0),
+      health: active.reduce((a,p)=>a+Number(p.health_limit||0),0),
+      ci: active.reduce((a,p)=>a+Number(p.ci_limit||0),0),
+      cashback: active.reduce((a,p)=>a+Number(p.annual_cashback||0),0),
+      maturity: active.reduce((a,p)=>a+Number(p.maturity_benefit||0),0),
+      members: unique.size || (active.length ? 1 : 0)
+    };
+  }
+
+  function typeBreakdown(list) {
+    const m = new Map();
+    list.forEach(p => {
+      const k = (p.policy_type || 'อื่น ๆ').trim() || 'อื่น ๆ';
+      m.set(k, (m.get(k)||0) + Number(p.sum_assured||0));
+    });
+    return [...m.entries()].sort((a,b)=>b[1]-a[1]);
+  }
+
+  function yearlySeries(list) {
+    const byAge = new Map();
+    list.forEach(p => {
+      const arr = Array.isArray(p.yearly_data) ? p.yearly_data : [];
+      arr.forEach(r => {
+        const age = Number(r.age ?? r.insured_age ?? r.end_age ?? r.policy_year ?? r.year);
+        if (!Number.isFinite(age)) return;
+        const row = byAge.get(age) || { age, death:0, cash:0, cashback:0 };
+        row.death += Number(r.death_benefit ?? r.sum_assured ?? r.life_benefit ?? 0);
+        row.cash += Number(r.surrender_value ?? r.cash_value ?? r.account_value ?? r.maturity_value ?? 0);
+        row.cashback += Number(r.cashback ?? r.annual_cashback ?? r.return ?? 0);
+        byAge.set(age,row);
+      });
+    });
+    return [...byAge.values()].sort((a,b)=>a.age-b.age);
+  }
+
+  function lineChart(list) {
+    const rows = yearlySeries(list);
+    if (!rows.length) return `<div class="pp28-empty">ยังไม่มีข้อมูลผลประโยชน์รายปีในกรมธรรม์</div>`;
+    const W=820,H=210,pad=28;
+    const max = Math.max(1,...rows.flatMap(r=>[r.death,r.cash,r.cashback]));
+    const minAge=rows[0].age,maxAge=rows[rows.length-1].age;
+    const x=a=>pad+(W-pad*2)*((a-minAge)/Math.max(1,maxAge-minAge));
+    const y=v=>H-pad-(H-pad*2)*(v/max);
+    const points=(key)=>rows.map(r=>`${x(r.age).toFixed(1)},${y(r[key]).toFixed(1)}`).join(' ');
+    const ticks=[0,.25,.5,.75,1].map(t=>{
+      const yy=y(max*t); return `<line x1="${pad}" y1="${yy}" x2="${W-pad}" y2="${yy}" stroke="#eef0f4"/><text x="2" y="${yy+4}" font-size="10" fill="#8a929e">${money(max*t)}</text>`;
+    }).join('');
+    const ageTicks=rows.filter((_,i)=>i===0||i===rows.length-1||i%Math.ceil(rows.length/5)===0)
+      .map(r=>`<text x="${x(r.age)}" y="${H-4}" text-anchor="middle" font-size="10" fill="#8a929e">${esc(r.age)}</text>`).join('');
+    return `<div class="pp28-chart"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      ${ticks}
+      <polyline fill="none" stroke="#d31145" stroke-width="3" points="${points('death')}"/>
+      <polyline fill="none" stroke="#f0ad3d" stroke-width="3" points="${points('cash')}"/>
+      <polyline fill="none" stroke="#2da879" stroke-width="3" points="${points('cashback')}"/>
+      ${ageTicks}
+    </svg></div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#757e8b">
+      <span>● <b style="color:#d31145">ทุนชีวิต</b></span>
+      <span>● <b style="color:#f0ad3d">มูลค่าเงินสด/เงินคืน</b></span>
+      <span>● <b style="color:#2da879">เงินคืนรายปี</b></span>
+    </div>`;
+  }
+
+  function donut(list) {
+    const entries = typeBreakdown(list);
+    const total = entries.reduce((a,x)=>a+x[1],0);
+    const colors=['#d31145','#f3ad3d','#2d9c72','#5865d8','#8a65c5','#49a6c8'];
+    if (!entries.length || total<=0) {
+      return `<div class="pp28-donutrow"><div class="pp28-donut" style="background:#eef0f4"><div class="pp28-donutcenter">฿0<br><small>รวมทั้งหมด</small></div></div><div class="pp28-legend"><div class="pp28-empty">ยังไม่มีข้อมูลทุนประกัน</div></div></div>`;
+    }
+    let deg=0;
+    const stops=entries.map((e,i)=>{
+      const start=deg; deg += (e[1]/total)*360;
+      return `${colors[i%colors.length]} ${start}deg ${deg}deg`;
+    }).join(',');
+    const legend=entries.map((e,i)=>`<div class="pp28-legendrow"><span><b style="color:${colors[i%colors.length]}">●</b> ${esc(e[0])}</span><b>${(e[1]/total*100).toFixed(0)}%</b></div>`).join('');
+    return `<div class="pp28-donutrow"><div class="pp28-donut" style="background:conic-gradient(${stops})"><div class="pp28-donutcenter">฿${money(total)}<br><small>รวมทั้งหมด</small></div></div><div class="pp28-legend">${legend}</div></div>`;
+  }
+
+  function renderTable(list) {
+    if (!list.length) return `<div class="pp28-empty">ยังไม่มีกรมธรรม์ — กด “เพิ่มกรมธรรม์”, “ถ่ายรูป” หรือ “อัปโหลดไฟล์” เพื่อเริ่มต้น</div>`;
+    return `<div class="pp28-tablewrap"><table class="pp28-table">
+      <thead><tr><th>ผู้เอาประกัน / เลขกรมธรรม์</th><th>บริษัท / แบบประกัน</th><th>ประเภท</th><th>ทุนชีวิต</th><th>เบี้ย/ปี</th><th>สุขภาพ</th><th>CI</th><th>สถานะ</th><th></th></tr></thead>
+      <tbody>${list.map(p=>`<tr>
+        <td><b>${esc(p.insured_name || state.client?.full_name || '-')}</b><br><span style="color:#8a929e">${esc(p.policy_number||'-')}</span></td>
+        <td><b>${esc(p.insurer||'-')}</b><br><span style="color:#8a929e">${esc(p.product_name||'-')}</span></td>
+        <td>${esc(p.policy_type||'-')}</td>
+        <td>฿${money(p.sum_assured)}</td><td>฿${money(p.annual_premium)}</td><td>฿${money(p.health_limit)}</td><td>฿${money(p.ci_limit)}</td>
+        <td><span class="pp28-pill ${(p.policy_status||'active')==='active'?'active':''}">${esc(p.policy_status||'active')}</span></td>
+        <td style="white-space:nowrap">
+          ${p.source_file_path?`<button class="pp28-linkbtn" data-v28-action="doc" data-id="${p.id}">เอกสาร</button>`:''}
+          <button class="pp28-linkbtn" data-v28-action="edit" data-id="${p.id}">แก้ไข</button>
+          <button class="pp28-linkbtn" data-v28-action="delete" data-id="${p.id}">ลบ</button>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+
+  function followUps(list) {
+    const items = list.filter(p =>
+      (p.policy_status && p.policy_status !== 'active') ||
+      !p.policy_number || !p.product_name || !p.insured_name
+    );
+    if (!items.length) return `<div class="pp28-empty">ยังไม่มีรายการที่ต้องติดตาม</div>`;
+    return renderTable(items.slice(0,5));
+  }
+
+  function allMemberNames() {
+    const names = [
+      state.client?.full_name,
+      ...state.familyMembers.map(m=>m.full_name),
+      ...state.policies.map(p=>p.insured_name)
+    ].filter(Boolean);
+    return [...new Set(names)];
+  }
+
+  function memberOptions() {
+    const members=allMemberNames();
+    return `<option value="all">ทั้งหมด</option>${members.map(x=>`<option value="${esc(x)}" ${state.filter===x?'selected':''}>${esc(x)}</option>`).join('')}`;
+  }
+
+  function insuredOptions(policy={}) {
+    const currentId = policy.insured_member_id || '';
+    const currentName = policy.insured_name || '';
+    const selfName = state.client?.full_name || 'ลูกค้าหลัก';
+    let html = `<option value="" data-name="${esc(selfName)}" ${(!currentId && (!currentName || currentName===selfName))?'selected':''}>${esc(selfName)} — ลูกค้าหลัก</option>`;
+    html += state.familyMembers.map(m => {
+      const selected = currentId===m.id || (!currentId && currentName===m.full_name);
+      const rel = m.relationship ? ` — ${esc(m.relationship)}` : '';
+      return `<option value="${m.id}" data-name="${esc(m.full_name)}" ${selected?'selected':''}>${esc(m.full_name)}${rel}</option>`;
+    }).join('');
+    return html;
+  }
+
+  function render() {
+    const root = document.getElementById(ROOT_ID);
+    if (!root) return;
+    const list = filteredPolicies();
+    const s = summary(list);
+    const clientName = state.client?.full_name || 'ลูกค้าปัจจุบัน';
+    root.innerHTML = `
+      <div class="pp28-shell">
+        <header class="pp28-top">
+          <div class="pp28-topline">
+            <div class="pp28-brand">
+              <button class="pp28-back" data-v28-action="close" aria-label="กลับ">←</button>
+              <div class="pp28-logo">P</div>
+              <div><h2>Policy View</h2><small>กรมธรรม์เดิมของ ${esc(clientName)}</small></div>
+            </div>
+            <div class="pp28-actions">
+              <button class="pp28-btn soft" data-v28-action="family">👨‍👩‍👧 + สมาชิก</button>
+              <button class="pp28-btn" data-v28-action="camera">📷 ถ่ายรูป</button>
+              <button class="pp28-btn" data-v28-action="upload">📁 อัปโหลดไฟล์</button>
+              <button class="pp28-btn red" data-v28-action="add">＋ เพิ่มกรมธรรม์</button>
+            </div>
+          </div>
+        </header>
+
+        <main class="pp28-main">
+          <div class="pp28-hero">
+            <div>
+              <div class="pp28-eyebrow">FAMILY PORTFOLIO</div>
+              <div class="pp28-title">ภาพรวมความคุ้มครอง</div>
+              <div class="pp28-sub">เห็นเบี้ย ความคุ้มครอง และกระแสเงินคืนของกรมธรรม์เดิมในจุดเดียว</div>
+            </div>
+            <div>
+              <label class="pp28-label">สมาชิกในครอบครัว</label>
+              <select class="pp28-select" id="pp28-member-filter">${memberOptions()}</select>
+              <button class="pp28-btn" style="width:100%;margin-top:8px" data-v28-action="print">⇩ ส่งออกรายงาน PDF</button>
+            </div>
+          </div>
+
+          <section class="pp28-grid4">
+            <div class="pp28-stat"><div class="pp28-label">จำนวนกรมธรรม์</div><div class="pp28-value">${s.count}</div><div class="pp28-unit">ฉบับ</div></div>
+            <div class="pp28-stat redtop"><div class="pp28-label">ทุนประกันรวม</div><div class="pp28-value">฿${money(s.sumAssured)}</div><div class="pp28-unit">ความคุ้มครองชีวิต</div></div>
+            <div class="pp28-stat"><div class="pp28-label">เบี้ยรวมต่อปี</div><div class="pp28-value">฿${money(s.premium)}</div><div class="pp28-unit">เฉลี่ย ฿${money(s.premium/12)}/เดือน</div></div>
+            <div class="pp28-stat"><div class="pp28-label">สมาชิกที่ได้รับความคุ้มครอง</div><div class="pp28-value">${s.members}</div><div class="pp28-unit">คน</div></div>
+          </section>
+
+          <section class="pp28-card">
+            <div class="pp28-cardhead"><div><h3>ทุนชีวิต เงินคืน และเงินคืนตามอายุ</h3><p>สรุปผลประโยชน์จากกรมธรรม์ที่บันทึกไว้</p></div><span class="pp28-pill active">รวมทุกฉบับ</span></div>
+            <div class="pp28-mini4">
+              <div class="pp28-mini"><span class="pp28-label">ทุนชีวิตรวม</span><b>฿${money(s.sumAssured)}</b></div>
+              <div class="pp28-mini"><span class="pp28-label">เงินคืนรายปีรวม</span><b>฿${money(s.cashback)}</b></div>
+              <div class="pp28-mini"><span class="pp28-label">เงินครบกำหนดรวม</span><b>฿${money(s.maturity)}</b></div>
+              <div class="pp28-mini"><span class="pp28-label">สุขภาพ + CI</span><b>฿${money(s.health+s.ci)}</b></div>
+            </div>
+            ${lineChart(list)}
+          </section>
+
+          <section class="pp28-card">
+            <div class="pp28-cardhead"><div><h3>รายละเอียดกรมธรรม์</h3><p>ข้อมูลผู้เอาประกัน บริษัท แบบประกัน และความคุ้มครอง</p></div><span class="pp28-pill">${list.length} ฉบับ</span></div>
+            ${renderTable(list)}
+          </section>
+
+          <section class="pp28-two">
+            <div class="pp28-card">
+              <div class="pp28-cardhead"><div><h3>สัดส่วนตามประเภท</h3><p>คำนวณจากทุนประกันรวม</p></div></div>
+              ${donut(list)}
+            </div>
+            <div class="pp28-card">
+              <div class="pp28-cardhead"><div><h3>Protection Snapshot</h3><p>ยอดเดิมที่ส่งต่อให้ระบบวางแผนใช้วิเคราะห์ Gap</p></div></div>
+              <div class="pp28-mini4" style="grid-template-columns:1fr 1fr">
+                <div class="pp28-mini"><span class="pp28-label">ชีวิต</span><b>฿${money(s.sumAssured)}</b></div>
+                <div class="pp28-mini"><span class="pp28-label">สุขภาพ</span><b>฿${money(s.health)}</b></div>
+                <div class="pp28-mini"><span class="pp28-label">โรคร้ายแรง</span><b>฿${money(s.ci)}</b></div>
+                <div class="pp28-mini"><span class="pp28-label">เบี้ย/ปี</span><b>฿${money(s.premium)}</b></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="pp28-card">
+            <div class="pp28-cardhead"><div><h3>กรมธรรม์ที่ต้องติดตาม</h3><p>สถานะผิดปกติหรือข้อมูลสำคัญยังไม่ครบ</p></div></div>
+            ${followUps(list)}
+          </section>
+        </main>
+      </div>
+
+      <input id="pp28-camera-input" type="file" accept="image/*" capture="environment" hidden>
+      <input id="pp28-file-input" type="file" accept="image/*,.pdf,.xlsx,.xls,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden>
+    `;
+    bindRootEvents(root);
+    publishSummary();
+  }
+
+  function bindRootEvents(root) {
+    const filter = root.querySelector('#pp28-member-filter');
+    filter?.addEventListener('change', e => { state.filter=e.target.value; render(); });
+
+    root.querySelectorAll('[data-v28-action]').forEach(btn=>{
+      btn.addEventListener('click', async e=>{
+        const action=e.currentTarget.dataset.v28Action;
+        const id=e.currentTarget.dataset.id;
+        if (action==='close') return close();
+        if (action==='family') return openFamilyMemberModal();
+        if (action==='camera') return root.querySelector('#pp28-camera-input')?.click();
+        if (action==='upload') return root.querySelector('#pp28-file-input')?.click();
+        if (action==='add') return openPolicyForm();
+        if (action==='print') return window.print();
+        if (action==='edit') return openPolicyForm(state.policies.find(p=>p.id===id));
+        if (action==='delete') return deletePolicy(id);
+        if (action==='doc') return openDocument(id);
+      });
+    });
+
+    root.querySelector('#pp28-camera-input')?.addEventListener('change', onFileSelected);
+    root.querySelector('#pp28-file-input')?.addEventListener('change', onFileSelected);
+  }
+
+  function onFileSelected(e) {
+    const file=e.target.files?.[0];
+    e.target.value='';
+    if (!file) return;
+    if (file.size > 15*1024*1024) return toast('ไฟล์ต้องมีขนาดไม่เกิน 15 MB','err');
+    state.pendingFile=file;
+    if (state.objectUrl) URL.revokeObjectURL(state.objectUrl);
+    state.objectUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : null;
+    openPolicyForm(null, file);
+  }
+
+  function formValue(form, name) {
+    const el=form.elements[name];
+    if (!el) return null;
+    if (el.type==='number') return el.value==='' ? 0 : Number(el.value);
+    return el.value.trim();
+  }
+
+  function openPolicyForm(policy=null, file=null) {
+    state.editingId=policy?.id || null;
+    const p=policy||{};
+    const back=document.createElement('div');
+    back.className='pp28-modalback';
+    back.id='pp28-modalback';
+    const previewFile=file||state.pendingFile;
+    back.innerHTML=`<div class="pp28-modal">
+      <div class="pp28-cardhead">
+        <div><h3>${policy?'แก้ไขกรมธรรม์':'เพิ่มกรมธรรม์'}</h3><p>${previewFile?'แนบเอกสารแล้ว กรุณาตรวจและกรอกข้อมูลสำคัญก่อนบันทึก':'กรอกข้อมูลกรมธรรม์เดิมของลูกค้า'}</p></div>
+        <button class="pp28-btn" id="pp28-modal-close">✕</button>
+      </div>
+      ${previewFile?`<div class="pp28-preview">
+        ${state.objectUrl?`<img src="${state.objectUrl}" alt="ตัวอย่างเอกสาร">`:''}
+        <div class="pp28-filetag"><span>📎 ${esc(previewFile.name)}</span><small>${(previewFile.size/1024/1024).toFixed(2)} MB</small></div>
+      </div>`:''}
+      <form id="pp28-policy-form">
+        <div class="pp28-formgrid" style="margin-top:12px">
+          <div class="pp28-field"><label>ผู้เอาประกัน / สมาชิกครอบครัว</label><select name="insured_member_id" required>${insuredOptions(p)}</select></div>
+          <div class="pp28-field"><label>เลขกรมธรรม์</label><input name="policy_number" value="${esc(p.policy_number||'')}"></div>
+          <div class="pp28-field"><label>บริษัทประกัน</label><input name="insurer" value="${esc(p.insurer||'AIA')}"></div>
+          <div class="pp28-field"><label>ชื่อแบบประกัน</label><input name="product_name" value="${esc(p.product_name||'')}"></div>
+          <div class="pp28-field"><label>ประเภท</label><select name="policy_type">
+            ${['ชีวิต','สะสมทรัพย์','บำนาญ','Unit Linked','สุขภาพ','โรคร้ายแรง','อุบัติเหตุ','อื่น ๆ'].map(x=>`<option ${p.policy_type===x?'selected':''}>${x}</option>`).join('')}
+          </select></div>
+          <div class="pp28-field"><label>สถานะ</label><select name="policy_status">
+            ${[['active','มีผลบังคับ'],['paid_up','ชำระเบี้ยครบ'],['lapsed','ขาดอายุ'],['cancelled','ยกเลิก']].map(([v,l])=>`<option value="${v}" ${(p.policy_status||'active')===v?'selected':''}>${l}</option>`).join('')}
+          </select></div>
+          <div class="pp28-field"><label>ทุนประกันชีวิต</label><input type="number" min="0" name="sum_assured" value="${Number(p.sum_assured||0)}"></div>
+          <div class="pp28-field"><label>เบี้ยประกันต่อปี</label><input type="number" min="0" name="annual_premium" value="${Number(p.annual_premium||0)}"></div>
+          <div class="pp28-field"><label>วงเงินสุขภาพ</label><input type="number" min="0" name="health_limit" value="${Number(p.health_limit||0)}"></div>
+          <div class="pp28-field"><label>วงเงินโรคร้ายแรง (CI)</label><input type="number" min="0" name="ci_limit" value="${Number(p.ci_limit||0)}"></div>
+          <div class="pp28-field"><label>อายุเริ่มสัญญา</label><input type="number" min="0" max="120" name="start_age" value="${p.start_age??''}"></div>
+          <div class="pp28-field"><label>ระยะเวลาคุ้มครอง (ปี)</label><input type="number" min="0" name="term_years" value="${p.term_years??''}"></div>
+          <div class="pp28-field"><label>ระยะเวลาชำระเบี้ย (ปี)</label><input type="number" min="0" name="pay_years" value="${p.pay_years??''}"></div>
+          <div class="pp28-field"><label>เงินคืนต่อปี</label><input type="number" min="0" name="annual_cashback" value="${Number(p.annual_cashback||0)}"></div>
+          <div class="pp28-field full"><label>เงินครบกำหนด</label><input type="number" min="0" name="maturity_benefit" value="${Number(p.maturity_benefit||0)}"></div>
+        </div>
+        <div class="pp28-modalactions">
+          <button type="button" class="pp28-btn" id="pp28-cancel">ยกเลิก</button>
+          <button type="submit" class="pp28-btn red">บันทึกกรมธรรม์</button>
+        </div>
+      </form>
+    </div>`;
+    document.body.appendChild(back);
+    const cleanup=()=>{ back.remove(); };
+    back.querySelector('#pp28-modal-close').onclick=cleanup;
+    back.querySelector('#pp28-cancel').onclick=cleanup;
+    back.addEventListener('click',e=>{if(e.target===back)cleanup();});
+    back.querySelector('#pp28-policy-form').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const submit=e.submitter; if(submit) submit.disabled=true;
+      try {
+        await savePolicy(e.currentTarget, policy, previewFile);
+        cleanup();
+      } catch(err) {
+        console.error('[Policy V28] save error',err);
+        toast(err.message||'บันทึกไม่สำเร็จ','err');
+      } finally { if(submit) submit.disabled=false; }
+    });
+  }
+
+
+  function openFamilyMemberModal() {
+    const back=document.createElement('div');
+    back.className='pp28-modalback';
+    back.id='pp28-family-modal';
+    const rows = state.familyMembers.length
+      ? state.familyMembers.map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eef0f4">
+          <div><b>${esc(m.full_name)}</b><div class="pp28-label">${esc(m.relationship||'สมาชิกครอบครัว')}${m.birth_date?` · ${esc(m.birth_date)}`:''}</div></div>
+          <button type="button" class="pp28-linkbtn" data-family-delete="${m.id}">ลบ</button>
+        </div>`).join('')
+      : `<div class="pp28-empty" style="padding:14px">ยังไม่มีสมาชิกครอบครัวเพิ่มเติม</div>`;
+
+    back.innerHTML=`<div class="pp28-modal">
+      <div class="pp28-cardhead">
+        <div><h3>สมาชิกในครอบครัว</h3><p>เพิ่มสมาชิกเพื่อผูกกรมธรรม์แต่ละฉบับให้ถูกคน</p></div>
+        <button class="pp28-btn" id="pp28-family-close">✕</button>
+      </div>
+      <div class="pp28-card" style="margin-top:0">
+        <div style="padding-bottom:8px"><b>${esc(state.client?.full_name||'ลูกค้าหลัก')}</b><div class="pp28-label">ลูกค้าหลัก</div></div>
+        ${rows}
+      </div>
+      <form id="pp28-family-form" style="margin-top:12px">
+        <div class="pp28-formgrid">
+          <div class="pp28-field"><label>ชื่อ-นามสกุล</label><input name="full_name" required placeholder="เช่น นางเอ ใจดี"></div>
+          <div class="pp28-field"><label>ความสัมพันธ์</label><select name="relationship">
+            <option>คู่สมรส</option><option>ลูก</option><option>พ่อ</option><option>แม่</option><option>พี่น้อง</option><option>ญาติ</option><option>อื่น ๆ</option>
+          </select></div>
+          <div class="pp28-field"><label>วันเกิด</label><input type="date" name="birth_date"></div>
+          <div class="pp28-field"><label>โทรศัพท์ (ถ้ามี)</label><input name="phone"></div>
+        </div>
+        <div class="pp28-modalactions">
+          <button type="button" class="pp28-btn" id="pp28-family-cancel">ยกเลิก</button>
+          <button type="submit" class="pp28-btn red">+ เพิ่มสมาชิก</button>
+        </div>
+      </form>
+    </div>`;
+    document.body.appendChild(back);
+
+    const close=()=>back.remove();
+    back.querySelector('#pp28-family-close').onclick=close;
+    back.querySelector('#pp28-family-cancel').onclick=close;
+    back.addEventListener('click',e=>{if(e.target===back)close();});
+
+    back.querySelectorAll('[data-family-delete]').forEach(btn=>{
+      btn.onclick=async()=>{
+        const id=btn.dataset.familyDelete;
+        const member=state.familyMembers.find(m=>m.id===id);
+        if(!member || !confirm(`ลบสมาชิก ${member.full_name} ใช่หรือไม่? กรมธรรม์เดิมจะยังอยู่แต่จะไม่ผูกกับสมาชิกนี้`)) return;
+        const dbx=getDb();
+        const {error}=await dbx.from('family_members').delete().eq('id',id).eq('client_id',getCurrentClientId());
+        if(error) return toast(error.message||'ลบสมาชิกไม่สำเร็จ','err');
+        await refresh();
+        close();
+        openFamilyMemberModal();
+        toast('ลบสมาชิกแล้ว');
+      };
+    });
+
+    back.querySelector('#pp28-family-form').onsubmit=async e=>{
+      e.preventDefault();
+      const submit=e.submitter; if(submit) submit.disabled=true;
       try{
-        const res=await fetch(url,{cache:'no-store',signal:ctrl.signal});
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        return await res.text();
-      }finally{clearTimeout(timer)}
+        const form=e.currentTarget;
+        const payload={
+          client_id:getCurrentClientId(),
+          full_name:form.elements.full_name.value.trim(),
+          relationship:form.elements.relationship.value||null,
+          birth_date:form.elements.birth_date.value||null,
+          phone:form.elements.phone.value.trim()||null,
+          updated_at:new Date().toISOString()
+        };
+        if(!payload.full_name) throw new Error('กรุณากรอกชื่อสมาชิก');
+        const dbx=getDb();
+        const {error}=await dbx.from('family_members').insert(payload);
+        if(error) throw error;
+        await refresh();
+        close();
+        toast('เพิ่มสมาชิกครอบครัวเรียบร้อย');
+      }catch(err){
+        console.error('[Policy V28 Family]',err);
+        toast(err.message||'เพิ่มสมาชิกไม่สำเร็จ','err');
+      }finally{ if(submit) submit.disabled=false; }
+    };
+  }
+
+  async function uploadFile(file) {
+    if (!file) return { path:null, name:null };
+    const dbx=getDb();
+    const clientId=getCurrentClientId();
+    const { data:authData, error:authErr }=await dbx.auth.getUser();
+    if (authErr) throw authErr;
+    const uid=authData?.user?.id;
+    if (!uid) throw new Error('กรุณาเข้าสู่ระบบก่อนอัปโหลดเอกสาร');
+    const path=`${uid}/${clientId}/${Date.now()}-${safeFileName(file.name)}`;
+    const { error }=await dbx.storage.from(STORAGE_BUCKET).upload(path,file,{upsert:false,contentType:file.type||undefined});
+    if (error) throw error;
+    return { path, name:file.name };
+  }
+
+  async function savePolicy(form, oldPolicy, file) {
+    const dbx=getDb(), clientId=getCurrentClientId();
+    if (!dbx||!clientId) throw new Error('ไม่พบลูกค้าที่กำลังเปิดอยู่');
+    let uploaded={path:oldPolicy?.source_file_path||null,name:oldPolicy?.source_file_name||null};
+    if (file) uploaded=await uploadFile(file);
+
+    const insuredSelect = form.elements.insured_member_id;
+    const selectedOption = insuredSelect?.options?.[insuredSelect.selectedIndex];
+    const insuredMemberId = insuredSelect?.value || null;
+    const insuredName = selectedOption?.dataset?.name || selectedOption?.textContent?.split(' — ')[0]?.trim() || state.client?.full_name || null;
+
+    const payload={
+      client_id:clientId,
+      insured_name:insuredName,
+      insured_member_id:insuredMemberId,
+      policy_number:formValue(form,'policy_number')||null,
+      insurer:formValue(form,'insurer')||null,
+      product_name:formValue(form,'product_name')||null,
+      policy_type:formValue(form,'policy_type')||null,
+      policy_status:formValue(form,'policy_status')||'active',
+      sum_assured:formValue(form,'sum_assured')||0,
+      annual_premium:formValue(form,'annual_premium')||0,
+      health_limit:formValue(form,'health_limit')||0,
+      ci_limit:formValue(form,'ci_limit')||0,
+      start_age:form.elements.start_age.value===''?null:Number(form.elements.start_age.value),
+      term_years:form.elements.term_years.value===''?null:Number(form.elements.term_years.value),
+      pay_years:form.elements.pay_years.value===''?null:Number(form.elements.pay_years.value),
+      annual_cashback:formValue(form,'annual_cashback')||0,
+      maturity_benefit:formValue(form,'maturity_benefit')||0,
+      source_file_name:uploaded.name,
+      source_file_path:uploaded.path,
+      updated_at:new Date().toISOString()
+    };
+
+    let res;
+    if (oldPolicy?.id) res=await dbx.from('insurance_policies').update(payload).eq('id',oldPolicy.id).eq('client_id',clientId);
+    else res=await dbx.from('insurance_policies').insert(payload);
+    if (res.error) throw res.error;
+
+    if (file && oldPolicy?.source_file_path && oldPolicy.source_file_path!==uploaded.path) {
+      dbx.storage.from(STORAGE_BUCKET).remove([oldPolicy.source_file_path]).catch(()=>{});
     }
+    state.pendingFile=null;
+    if(state.objectUrl){URL.revokeObjectURL(state.objectUrl);state.objectUrl=null;}
+    await refresh();
+    toast('บันทึกกรมธรรม์เรียบร้อย');
+    notifyPlanner();
+  }
+
+  async function deletePolicy(id) {
+    const p=state.policies.find(x=>x.id===id);
+    if (!p) return;
+    if (!confirm(`ลบกรมธรรม์ ${p.product_name||p.policy_number||''} ใช่หรือไม่?`)) return;
+    const dbx=getDb(), clientId=getCurrentClientId();
+    const { error }=await dbx.from('insurance_policies').delete().eq('id',id).eq('client_id',clientId);
+    if (error) return toast(error.message||'ลบไม่สำเร็จ','err');
+    if (p.source_file_path) dbx.storage.from(STORAGE_BUCKET).remove([p.source_file_path]).catch(()=>{});
+    await refresh();
+    toast('ลบกรมธรรม์แล้ว');
+    notifyPlanner();
+  }
+
+  async function openDocument(id) {
+    const p=state.policies.find(x=>x.id===id);
+    if (!p?.source_file_path) return toast('กรมธรรม์นี้ไม่มีไฟล์แนบ','err');
+    const dbx=getDb();
+    const { data,error }=await dbx.storage.from(STORAGE_BUCKET).createSignedUrl(p.source_file_path,60);
+    if(error||!data?.signedUrl) return toast('เปิดเอกสารไม่สำเร็จ','err');
+    window.open(data.signedUrl,'_blank','noopener');
+  }
+
+  function publishSummary() {
+    const s=summary(state.policies.filter(p=>(p.policy_status||'active')!=='cancelled'));
+    window.policyPortfolioSummary = {
+      lifeCoverage:s.sumAssured,
+      annualPremium:s.premium,
+      healthCoverage:s.health,
+      criticalIllnessCoverage:s.ci,
+      policyCount:s.count,
+      updatedAt:new Date().toISOString()
+    };
+    window.dispatchEvent(new CustomEvent('policyportfolio:summary',{detail:window.policyPortfolioSummary}));
+  }
+
+  function notifyPlanner() {
+    publishSummary();
+    for (const fn of ['calc','calculate','renderDashboard','updateDashboard','refreshDashboard']) {
+      try { if (typeof window[fn]==='function') window[fn](); } catch (_) {}
+    }
+    window.dispatchEvent(new CustomEvent('policyportfolio:changed',{detail:window.policyPortfolioSummary}));
+  }
+
+  async function refresh() {
+    await loadClientAndPolicies();
+    render();
+  }
+
+  async function open() {
+    installStyles();
+    let root=document.getElementById(ROOT_ID);
+    if(!root){root=document.createElement('section');root.id=ROOT_ID;document.body.appendChild(root);}
+    root.innerHTML='<div class="pp28-shell"><div class="pp28-main"><div class="pp28-card"><div class="pp28-empty">กำลังโหลดข้อมูลกรมธรรม์...</div></div></div></div>';
+    root.style.display='block';
+    document.documentElement.style.overflow='hidden';
+    try { await refresh(); }
+    catch(err){
+      console.error('[Policy V28]',err);
+      root.innerHTML=`<div class="pp28-shell"><div class="pp28-main"><div class="pp28-card"><button class="pp28-btn" onclick="window.closePolicyPortfolio()">← กลับ</button><div class="pp28-empty"><b>${esc(err.message||'โหลดข้อมูลไม่สำเร็จ')}</b><br><br>กรุณาเลือกลูกค้าจากเมนู “ลูกค้าของฉัน” ก่อน</div></div></div></div>`;
+    }
+  }
+
+  function close() {
+    const root=document.getElementById(ROOT_ID);
+    if(root) root.style.display='none';
+    document.documentElement.style.overflow='';
+  }
+
+  function interceptExistingPolicyMenu() {
+    document.addEventListener('click', e=>{
+      if (e.target.closest(`#${ROOT_ID}`) || e.target.closest('#pp28-modalback')) return;
+      const el=e.target.closest('a,button,[data-section],[data-tab],[data-page],.nav-item,.menu-item');
+      if(!el) return;
+      const text=(el.textContent||'').replace(/\s+/g,' ').trim();
+      if (text && text.length<60 && /กรมธรรม์/.test(text)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        open();
+      }
+    }, true);
+  }
+
+
+  function addPolicyMenu() {
+    if (document.querySelector('[data-v28-policy-nav="1"]')) return true;
+
+    const candidates = [...document.querySelectorAll('a,button,[data-section],[data-tab],[data-page],.nav-item,.menu-item')];
+    const preferred = candidates.find(el => /ลูกค้าของฉัน/.test((el.textContent || '').replace(/\s+/g,' ').trim()))
+      || candidates.find(el => /ความเสี่ยง\s*&\s*ประกัน/.test((el.textContent || '').replace(/\s+/g,' ').trim()))
+      || candidates.find(el => /แดชบอร์ด/.test((el.textContent || '').replace(/\s+/g,' ').trim()));
+
+    if (preferred && preferred.parentElement) {
+      const item = preferred.cloneNode(true);
+      item.removeAttribute('id');
+      item.setAttribute('data-v28-policy-nav','1');
+      item.removeAttribute('data-section');
+      item.removeAttribute('data-tab');
+      item.removeAttribute('data-page');
+      item.removeAttribute('href');
+      item.textContent = 'กรมธรรม์';
+      item.classList.remove('active');
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        open();
+      }, true);
+      preferred.insertAdjacentElement('afterend', item);
+      return true;
+    }
+
+    // Fallback: find the main horizontal navigation by Dashboard item.
+    const dash = candidates.find(el => /แดชบอร์ด/.test((el.textContent || '').trim()));
+    if (dash && dash.parentElement) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.setAttribute('data-v28-policy-nav','1');
+      item.textContent = 'กรมธรรม์';
+      item.className = dash.className || '';
+      item.style.cssText = 'cursor:pointer;white-space:nowrap;';
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        open();
+      }, true);
+      dash.parentElement.appendChild(item);
+      return true;
+    }
+    if (!document.getElementById('pp28-fallback-nav')) {
+      const fb = document.createElement('button');
+      fb.id = 'pp28-fallback-nav';
+      fb.type = 'button';
+      fb.textContent = 'กรมธรรม์';
+      fb.style.cssText = 'position:fixed;right:14px;bottom:76px;z-index:9997;background:#d31145;color:#fff;border:0;border-radius:999px;padding:12px 17px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.18);';
+      fb.onclick = open;
+      document.body.appendChild(fb);
+    }
+    return false;
+  }
+
+  function keepPolicyMenuAlive() {
+    addPolicyMenu();
+    const mo = new MutationObserver(() => addPolicyMenu());
+    mo.observe(document.documentElement, {childList:true, subtree:true});
+    setInterval(addPolicyMenu, 1500);
+  }
+
+  window.openPolicyPortfolio=open;
+  window.closePolicyPortfolio=close;
+  window.refreshPolicyPortfolio=refresh;
+  window.getPolicyPortfolioSummary=()=>window.policyPortfolioSummary||summary(state.policies);
+
+  installStyles();
+  interceptExistingPolicyMenu();
+  keepPolicyMenuAlive();
+  console.info(`[Policy Portfolio V${VERSION}] ready`);
+})();
+</script><script>
+(() => {
+  'use strict';
+
+  function getDb() {
+    const xs = [];
+    try { if (typeof supabaseClient !== 'undefined') xs.push(supabaseClient); } catch (_) {}
+    try { if (typeof sb !== 'undefined') xs.push(sb); } catch (_) {}
+    try { if (typeof db !== 'undefined') xs.push(db); } catch (_) {}
+    try { if (typeof supabase !== 'undefined') xs.push(supabase); } catch (_) {}
+    xs.push(window.supabaseClient, window.sb, window.db, window._supabase);
+    return xs.find(x => x && typeof x.from === 'function') || null;
+  }
+
+  function toast(msg, bad=false) {
+    let el = document.getElementById('client-create-fix-toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'client-create-fix-toast';
+      el.style.cssText = 'position:fixed;left:50%;bottom:24px;z-index:12000;transform:translateX(-50%);max-width:90vw;padding:12px 16px;border-radius:12px;color:#fff;font-weight:700;box-shadow:0 8px 25px rgba(0,0,0,.18);font-family:inherit;';
+      document.body.appendChild(el);
+    }
+    el.style.background = bad ? '#a81633' : '#202733';
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.style.display='none', 3000);
+  }
+
+  function findCreatePanel(button) {
+    let n = button;
+    for (let i=0; i<8 && n; i++, n=n.parentElement) {
+      const t=(n.textContent||'').replace(/\s+/g,' ');
+      if (/เพิ่มลูกค้าใหม่/.test(t) && /สร้างโปรไฟล์ลูกค้า/.test(t)) return n;
+    }
+    return button.parentElement;
+  }
+
+  function valByLabel(panel, labelText) {
+    const labels = [...panel.querySelectorAll('label')];
+    const lab = labels.find(x => (x.textContent||'').replace(/\s+/g,'').includes(labelText.replace(/\s+/g,'')));
+    if (lab) {
+      const f = lab.getAttribute('for');
+      if (f) {
+        const el = panel.querySelector('#'+CSS.escape(f));
+        if (el) return el.value ?? '';
+      }
+      const el = lab.querySelector('input,select,textarea') || lab.parentElement?.querySelector('input,select,textarea');
+      if (el) return el.value ?? '';
+    }
+    return '';
+  }
+
+  function readForm(panel) {
+    const controls = [...panel.querySelectorAll('input,select,textarea')].filter(x => !['button','submit','hidden'].includes(x.type));
+    const full_name = valByLabel(panel,'ชื่อ-นามสกุล') || controls[0]?.value || '';
+    const nickname = valByLabel(panel,'ชื่อเล่น') || controls[1]?.value || '';
+    const phone = valByLabel(panel,'โทรศัพท์') || controls[2]?.value || '';
+    const email = valByLabel(panel,'อีเมล') || controls[3]?.value || '';
+    const occupation = valByLabel(panel,'อาชีพ') || controls[4]?.value || '';
+    const marital_status = valByLabel(panel,'สถานภาพ') || controls.find(x=>x.tagName==='SELECT')?.value || '';
+    return {
+      full_name: String(full_name).trim(),
+      nickname: String(nickname).trim() || null,
+      phone: String(phone).trim() || null,
+      email: String(email).trim() || null,
+      occupation: String(occupation).trim() || null,
+      marital_status: String(marital_status).trim() || null
+    };
+  }
+
+  async function openCreatedClient(id) {
+    try { window.currentClientId = id; } catch (_) {}
     try {
-      let h;
-      try{ h=await loadBase(frozen,8000); }
-      catch(firstErr){ console.warn('[AIA Loader] raw fallback',firstErr); h=await loadBase(fallback,8000); }
+      if (typeof window.loadClients === 'function') await window.loadClients();
+    } catch (e) { console.warn('loadClients failed', e); }
 
-      const nestedHomePatch=`let h=await (await fetch(u,{cache:'no-store'})).text();
-      h=h.replace(/<button class="active" data-tab="dashboard">แดชบอร์ด<\\/button>/,'<button data-tab="dashboard">แดชบอร์ด</button>');
-      h=h.replace(/<button(?: class="active")? data-tab="clients">ลูกค้าของฉัน<\\/button>/,'<button class="active" data-tab="clients">ลูกค้าของฉัน</button>');
-      h=h.replace(/<section id="clients" class="section(?: active)?">/,'<section id="clients" class="section active">');
-      h=h.replace(/<section id="dashboard" class="section(?: active)?">/,'<section id="dashboard" class="section">');
-      h=h.replace(/<h2 id="pageTitle">[^<]*<\\/h2>/,'<h2 id="pageTitle">ลูกค้าของฉัน</h2>');
-      h=h.replace(/<p id="clientLine">[^<]*<\\/p>/,'<p id="clientLine">ค้นหา เลือก หรือสร้างลูกค้าใหม่เพื่อเริ่มวางแผน</p>');
-      h=h.replace(/<div class="actions" style="margin-top:18px"><button class="btn red" onclick="calcAll\\(\\)">คำนวณและสรุป<\\/button><button class="btn light" onclick="resetDemo\\(\\)">ล้างข้อมูล<\\/button><\\/div>/,'');`;
-      h=h.replace(/let h=await \(await fetch\(u,\{cache:'no-store'\}\)\)\.text\(\);/,nestedHomePatch);
+    try {
+      if (typeof window.openClient === 'function') {
+        await window.openClient(id);
+        return;
+      }
+    } catch (e) { console.warn('openClient failed', e); }
 
-      h=h.replace('location.reload();',"if(typeof window.loadClients==='function') await window.loadClients(); if(typeof window.openClient==='function'){ await window.openClient(id); return; }");
-      const target="h=h.replace('</body>',addons+'</body>');";
-      const replacement="h=h.replace('</body>',addons+'<script src=\"./policy-scanner.js?v=20260822a\"><\\/script><script src=\"./admin-launcher.js?v=20260823a\"><\\/script><script src=\"./db-bridge.js?v=20260823a\"><\\/script><script src=\"./client-context-bridge.js?v=20260823a\"><\\/script><script src=\"./client-store-v42.js?v=20260825d\"><\\/script><script src=\"./dashboard-store-v45.js?v=20260825g\"><\\/script><script src=\"./health-planner.js?v=20260823c\"><\\/script><script src=\"./health-planner-v2.js?v=20260823c\"><\\/script><script src=\"./report-generator.js?v=20260823a\"><\\/script><script src=\"./report-store-v44.js?v=20260825f\"><\\/script><script src=\"./health-report-sync.js?v=20260823a\"><\\/script><script src=\"./calendar-assistant.js?v=20260824a\"><\\/script><script src=\"./calendar-store-v43.js?v=20260825e\"><\\/script><script src=\"./ux-policy-v29.js?v=20260824a\"><\\/script><script src=\"./policy-benefit-builder-v30.js?v=20260824b\"><\\/script><script src=\"./app-shell-v41.js?v=20260825c\"><\\/script><script src=\"./admin-menu-v46.js?v=20260825h\"><\\/script></body>');";
-      if(!h.includes(target)) throw new Error('ไม่พบจุดเชื่อมส่วนเสริม');
-      h=h.replace(target,replacement);
-      document.open();
-      document.write(h);
-      document.close();
-    }catch(e){
-      console.error('[AIA Loader]',e);
-      document.getElementById('loading').innerHTML='<b>โหลดระบบไม่สำเร็จ</b><br><span style="font-size:13px;color:#666">กรุณากดรีเฟรชอีกครั้ง หากยังไม่ขึ้นให้ปิดแท็บแล้วเปิดใหม่</span>';
+    try {
+      sessionStorage.setItem('aia_pending_client_id', id);
+      location.reload();
+    } catch (_) {}
+  }
+
+  async function createClient(button) {
+    const dbx = getDb();
+    if (!dbx) return toast('ไม่พบการเชื่อมต่อฐานข้อมูล กรุณารีเฟรชหน้าเว็บ', true);
+
+    const panel = findCreatePanel(button);
+    const data = readForm(panel);
+    if (!data.full_name) return toast('กรุณากรอกชื่อ-นามสกุล', true);
+
+    button.disabled = true;
+    const oldText = button.textContent;
+    button.textContent = 'กำลังสร้างโปรไฟล์...';
+
+    try {
+      const { data: authData, error: authErr } = await dbx.auth.getUser();
+      if (authErr) throw authErr;
+      const uid = authData?.user?.id;
+      if (!uid) throw new Error('กรุณาเข้าสู่ระบบใหม่');
+
+      // Prevent accidental duplicates when name + phone/email are identical.
+      let q = dbx.from('clients').select('id,full_name,phone,email').eq('advisor_id', uid).eq('full_name', data.full_name);
+      if (data.phone) q = q.eq('phone', data.phone);
+      else if (data.email) q = q.eq('email', data.email);
+      else q = q.limit(1);
+
+      const existing = await q.limit(1);
+      if (existing.error) throw existing.error;
+      if (existing.data?.length) {
+        toast('พบลูกค้านี้ในระบบแล้ว กำลังเปิดโปรไฟล์เดิม');
+        await openCreatedClient(existing.data[0].id);
+        return;
+      }
+
+      const payload = {
+        advisor_id: uid,
+        full_name: data.full_name,
+        nickname: data.nickname,
+        phone: data.phone,
+        email: data.email,
+        occupation: data.occupation,
+        marital_status: data.marital_status,
+        dependents: 0,
+        updated_at: new Date().toISOString()
+      };
+
+      const res = await dbx.from('clients').insert(payload).select('id').single();
+      if (res.error) throw res.error;
+
+      toast('สร้างโปรไฟล์ลูกค้าเรียบร้อย');
+      await openCreatedClient(res.data.id);
+    } catch (err) {
+      console.error('[Client Create Fix]', err);
+      toast(err?.message || 'สร้างโปรไฟล์ลูกค้าไม่สำเร็จ', true);
+    } finally {
+      button.disabled = false;
+      button.textContent = oldText;
     }
-  })();
-  </script>
-</body>
-</html>
+  }
+
+  // Capture before the legacy handler to stop duplicate inserts.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button,input[type="button"],input[type="submit"],a');
+    if (!btn) return;
+    const text = (btn.textContent || btn.value || '').replace(/\s+/g,' ').trim();
+    if (text !== 'สร้างโปรไฟล์ลูกค้า') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    createClient(btn);
+  }, true);
+
+  // If a reload was required, reopen the newly-created client.
+  const reopen = () => {
+    const id = sessionStorage.getItem('aia_pending_client_id');
+    if (!id) return;
+    if (typeof window.openClient === 'function') {
+      sessionStorage.removeItem('aia_pending_client_id');
+      Promise.resolve(window.openClient(id)).catch(console.warn);
+    } else {
+      setTimeout(reopen, 600);
+    }
+  };
+  setTimeout(reopen, 1000);
+
+  console.info('[Client Create Fix V28.3] ready');
+})();
+<\/script><script src="./policy-scanner.js?v=20260822a"></script><script src="./admin-launcher.js?v=20260823a"></script><script src="./db-bridge.js?v=20260823a"></script><script src="./client-context-bridge.js?v=20260823a"></script><script src="./client-store-v42.js?v=20260825d"></script><script src="./dashboard-store-v45.js?v=20260825g"></script><script src="./health-planner.js?v=20260823c"></script><script src="./health-planner-v2.js?v=20260823c"></script><script src="./report-generator.js?v=20260823a"></script><script src="./report-store-v44.js?v=20260825f"></script><script src="./health-report-sync.js?v=20260823a"></script><script src="./calendar-assistant.js?v=20260824a"></script><script src="./calendar-store-v43.js?v=20260825e"></script><script src="./ux-policy-v29.js?v=20260824a"></script><script src="./policy-benefit-builder-v30.js?v=20260824b"></script><script src="./app-shell-v41.js?v=20260825c"></script><script src="./admin-menu-v46.js?v=20260825h"></script></body></html>
