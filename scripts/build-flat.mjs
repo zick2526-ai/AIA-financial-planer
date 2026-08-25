@@ -27,7 +27,7 @@ h=h.replace(/<div class="actions" style="margin-top:18px"><button class="btn red
 h=h.replace('location.reload();',"if(typeof window.loadClients==='function') await window.loadClients(); if(typeof window.openClient==='function'){ await window.openClient(id); return; }");
 
 const currentAddons=[
- './policy-scanner.js?v=20260822a','./admin-launcher.js?v=20260823a','./db-bridge.js?v=20260823a','./client-context-bridge.js?v=20260823a','./client-store-v42.js?v=20260825d','./health-planner.js?v=20260823c','./health-planner-v2.js?v=20260823c','./report-generator.js?v=20260823a','./report-store-v44.js?v=20260825f','./health-report-sync.js?v=20260823a','./calendar-assistant.js?v=20260824a','./calendar-store-v43.js?v=20260825e','./ux-policy-v29.js?v=20260824a','./policy-benefit-builder-v30.js?v=20260824b','./app-shell-v41.js?v=20260825c','./admin-menu-v46.js?v=20260825h'
+ './policy-scanner.js?v=20260822a','./admin-launcher.js?v=20260823a','./db-bridge.js?v=20260823a','./client-context-bridge.js?v=20260823a','./client-store-v42.js?v=20260825d','./open-client-v47.js?v=20260825i','./health-planner.js?v=20260823c','./health-planner-v2.js?v=20260823c','./report-generator.js?v=20260823a','./report-store-v44.js?v=20260825f','./health-report-sync.js?v=20260823a','./calendar-assistant.js?v=20260824a','./calendar-store-v43.js?v=20260825e','./ux-policy-v29.js?v=20260824a','./policy-benefit-builder-v30.js?v=20260824b','./app-shell-v41.js?v=20260825c','./admin-menu-v46.js?v=20260825h'
 ].map(src=>`<script src="${src}"></script>`).join('');
 
 if(!h.includes('</body>'))throw new Error('Base document has no closing body');
