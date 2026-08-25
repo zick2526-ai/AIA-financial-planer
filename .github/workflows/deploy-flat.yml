@@ -1,0 +1,42 @@
+name: Deploy Flat Index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.deploy-flat'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build flat index
+        run: node scripts/build-flat.mjs
+      - name: Validate flat index
+        run: |
+          test -s dist/index.html
+          grep -q 'policy-portfolio-v28' dist/index.html
+          grep -q '<button class="active" data-tab="clients">ลูกค้าของฉัน</button>' dist/index.html
+          grep -q 'client-store-v42.js' dist/index.html
+          grep -q 'app-shell-v41.js' dist/index.html
+          ! grep -q 'กำลังโหลด AIA Financial Planner' dist/index.html
+      - name: Replace production index
+        run: cp dist/index.html index.html
+      - name: Commit flat production index
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then
+            echo 'No index change required'
+          else
+            git commit -m 'Deploy flat production index [flat-deploy]'
+            git push origin HEAD:main
+          fi
