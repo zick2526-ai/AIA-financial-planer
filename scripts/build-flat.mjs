@@ -14,10 +14,9 @@ if(!v28m)throw new Error('Unable to extract V28 module');
 const v28=evalExpr(v28m[1]);
 const addonsM=frozenHtml.match(/const addons\s*=\s*([\s\S]*?)\s*;\s*\n\s*h=h\.replace\('<\\?\/body>'?,addons\+'<\\?\/body>'?\);/);
 if(!addonsM)throw new Error('Unable to extract historical addons expression');
-const historicalAddons=evalExpr(addonsM[1],{v28});
+const historicalAddons=evalExpr(addonsM[1],{v28}).replaceAll('<\\/script>','</script>');
 
 let h=baseHtml;
-// Native initial Home state: clients page, not dashboard.
 h=h.replace(/<button class="active" data-tab="dashboard">แดชบอร์ด<\/button>/,'<button data-tab="dashboard">แดชบอร์ด</button>');
 h=h.replace(/<button(?: class="active")? data-tab="clients">ลูกค้าของฉัน<\/button>/,'<button class="active" data-tab="clients">ลูกค้าของฉัน</button>');
 h=h.replace(/<section id="clients" class="section(?: active)?">/,'<section id="clients" class="section active">');
@@ -33,6 +32,7 @@ const currentAddons=[
 
 if(!h.includes('</body>'))throw new Error('Base document has no closing body');
 h=h.replace('</body>',historicalAddons+currentAddons+'</body>');
+if(h.includes('<\\/script>'))throw new Error('Escaped script closing tag remains in flat output');
 await fs.mkdir('dist',{recursive:true});
 await fs.writeFile('dist/index.html',h,'utf8');
 console.log(`flat index built: ${h.length} bytes`);
