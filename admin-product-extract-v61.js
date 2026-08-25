@@ -4,6 +4,7 @@
   const SUPABASE_KEY='sb_publishable_L8dg3t06sHUc_1StXBuMKg_Nx4S6Wrs';
   const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   const BUCKET='policy-documents';
+  const MAX_BYTES=50*1024*1024;
   let tempPath=null;
 
   const set=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=typeof v==='string'?v:JSON.stringify(v,null,2)};
@@ -17,7 +18,7 @@
     const file=input?.files?.[0];
     if(!file){if(st)st.textContent='กรุณาเลือกไฟล์ PDF ก่อน';return;}
     if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')){if(st)st.textContent='Auto Extract รองรับ PDF เท่านั้น';return;}
-    if(file.size>15*1024*1024){if(st)st.textContent='PDF ต้องไม่เกิน 15 MB';return;}
+    if(file.size>MAX_BYTES){if(st)st.textContent='PDF ต้องไม่เกิน 50 MB';return;}
     const btn=document.getElementById('pcExtractPdf'); if(btn)btn.disabled=true;
     try{
       if(st)st.textContent='กำลังอัปโหลด PDF ชั่วคราวเพื่อให้ AI อ่าน...';
@@ -40,7 +41,7 @@
   function enhance(){
     const file=document.getElementById('pcFile'); if(!file||document.getElementById('pcExtractPdf'))return;
     const btn=document.createElement('button');btn.id='pcExtractPdf';btn.type='button';btn.className='btn red';btn.style.marginTop='8px';btn.textContent='✨ AI อ่าน PDF และเติม Draft';btn.onclick=extractPdf;
-    const note=document.createElement('div');note.style.cssText='font-size:12px;color:#7b8492;margin-top:6px';note.textContent='AI จะเติมข้อมูลให้ตรวจทานเท่านั้น และจะไม่ Verify อัตโนมัติ';
+    const note=document.createElement('div');note.style.cssText='font-size:12px;color:#7b8492;margin-top:6px';note.textContent='รองรับ PDF สูงสุด 50 MB · AI จะเติมข้อมูลให้ตรวจทานเท่านั้น และจะไม่ Verify อัตโนมัติ';
     file.parentElement?.append(btn,note);
   }
 
