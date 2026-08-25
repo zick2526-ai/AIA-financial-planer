@@ -7,8 +7,13 @@ function addMenu(){
   if(!grid||grid.querySelector('[data-ai-review-v49]'))return false;
   const b=document.createElement('button');
   b.className='v41-card';b.type='button';b.dataset.aiReviewV49='1';
-  b.innerHTML='<b>AI Insurance Review</b><small>เทียบกรมธรรม์เดิมกับ AIA และวิเคราะห์ Protection Gap</small>';
-  b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();document.querySelector('#aia-v41 .v41-sheet')?.classList.remove('open');window.openAIInsuranceReview?.()});
+  b.innerHTML='<b>/AIA v2 · วิเคราะห์กรมธรรม์</b><small>อ่านความคุ้มครองเดิม → Gap Analysis → เทียบ Product Catalog → ข้อความ LINE → Advisor Review → PDF</small>';
+  b.addEventListener('click',e=>{
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    document.querySelector('#aia-v41 .v41-sheet')?.classList.remove('open');
+    window.dispatchEvent(new CustomEvent('aia:skill-v2-open',{detail:{source:'planner-menu'}}));
+    window.openAIInsuranceReview?.();
+  });
   grid.prepend(b);return true;
 }
 document.addEventListener('click',e=>{
@@ -17,5 +22,5 @@ document.addEventListener('click',e=>{
 },true);
 let tries=0;const timer=setInterval(()=>{tries++;if(addMenu()||tries>60)clearInterval(timer)},150);
 window.addEventListener('aia:client-selected',()=>setTimeout(addMenu,100));
-window.AIAInsuranceReviewMenuV49={mount:addMenu};
+window.AIAInsuranceReviewMenuV49={mount:addMenu,workflow:'AIA_SKILL_V2'};
 })();
