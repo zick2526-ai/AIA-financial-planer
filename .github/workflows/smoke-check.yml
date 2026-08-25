@@ -27,6 +27,7 @@ jobs:
           node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
           node --check admin-menu-v46.js
+          node --check admin-ai-usage-v54.js
           node --check policy-scanner.js
           node --check ux-policy-v29.js
           node --check policy-benefit-builder-v30.js
