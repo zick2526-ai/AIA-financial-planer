@@ -21,6 +21,8 @@ jobs:
           node --check open-client-v47.js
           node --check calendar-store-v43.js
           node --check report-store-v44.js
+          node --check insurance-review-v48.js
+          node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
           node --check admin-menu-v46.js
           node --check policy-scanner.js
@@ -29,7 +31,6 @@ jobs:
       - name: Verify required production scripts are referenced
         run: |
           grep -q 'client-store-v42.js' index.html
-          grep -q 'open-client-v47.js' index.html || true
           grep -q 'calendar-store-v43.js' index.html
           grep -q 'report-store-v44.js' index.html
           grep -q 'app-shell-v41.js' index.html
