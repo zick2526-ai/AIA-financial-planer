@@ -26,6 +26,7 @@ jobs:
           node --check advisor-review-v51.js
           node --check sales-comparison-ui-v52.js
           node --check sales-advisor-v53.js
+          node --check comparison-attachments-v55.js
           node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
           node --check admin-menu-v46.js
@@ -43,5 +44,6 @@ jobs:
           grep -q 'advisor-review-v51.js' scripts/build-flat.mjs
           grep -q 'sales-comparison-ui-v52.js' scripts/build-flat.mjs
           grep -q 'sales-advisor-v53.js' scripts/build-flat.mjs
+          grep -q 'comparison-attachments-v55.js' scripts/build-flat.mjs
           grep -q 'app-shell-v41.js' scripts/build-flat.mjs
           grep -q 'admin-menu-v46.js' scripts/build-flat.mjs
