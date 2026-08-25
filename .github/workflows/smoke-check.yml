@@ -22,6 +22,7 @@ jobs:
           node --check calendar-store-v43.js
           node --check report-store-v44.js
           node --check insurance-review-v48.js
+          node --check insurance-review-ai-v50.js
           node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
           node --check admin-menu-v46.js
