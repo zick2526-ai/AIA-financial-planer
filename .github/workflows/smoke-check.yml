@@ -23,6 +23,7 @@ jobs:
           node --check report-store-v44.js
           node --check insurance-review-v48.js
           node --check insurance-review-ai-v50.js
+          node --check advisor-review-v51.js
           node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
           node --check admin-menu-v46.js
@@ -34,5 +35,8 @@ jobs:
           grep -q 'client-store-v42.js' index.html
           grep -q 'calendar-store-v43.js' index.html
           grep -q 'report-store-v44.js' index.html
+          grep -q 'insurance-review-v48.js' index.html
+          grep -q 'insurance-review-ai-v50.js' index.html
+          grep -q 'advisor-review-v51.js' index.html
           grep -q 'app-shell-v41.js' index.html
           grep -q 'admin-menu-v46.js' index.html
