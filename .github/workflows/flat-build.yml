@@ -1,0 +1,30 @@
+name: Flat Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build flat production index
+        run: node scripts/build-flat.mjs
+      - name: Validate flat index
+        run: |
+          test -s dist/index.html
+          grep -q 'policy-portfolio-v28' dist/index.html
+          grep -q 'client-store-v42.js' dist/index.html
+          grep -q 'app-shell-v41.js' dist/index.html
+          ! grep -q 'กำลังโหลด AIA Financial Planner' dist/index.html
+      - name: Upload flat build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flat-app
+          path: dist/index.html
