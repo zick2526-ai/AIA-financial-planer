@@ -30,6 +30,7 @@ jobs:
           node --check navigation-regression-v58.js
           node --check auth-context-regression-v59.js
           node --check auth-redirect-regression-v60.js
+          node --check policy-navigation-fix-v63.js
           node --check insurance-review-menu-v49.js
           node --check app-shell-v41.js
           node --check admin-menu-v46.js
@@ -51,6 +52,7 @@ jobs:
           grep -q 'navigation-regression-v58.js' scripts/build-flat.mjs
           grep -q 'auth-context-regression-v59.js' scripts/build-flat.mjs
           grep -q 'auth-redirect-regression-v60.js' scripts/build-flat.mjs
+          grep -q 'policy-navigation-fix-v63.js' scripts/build-flat.mjs
           grep -q 'app-shell-v41.js' scripts/build-flat.mjs
           grep -q 'admin-menu-v46.js' scripts/build-flat.mjs
           if grep -q 'advisor-review-v51.js' scripts/build-flat.mjs; then echo 'legacy V51 must not be in production build'; exit 1; fi
