@@ -61,7 +61,10 @@ document.addEventListener('click',e=>{
 },true);
 const style=document.createElement('style');
 style.id='policy-v64-layer';
-style.textContent='#policy-portfolio-v28{z-index:50000!important;pointer-events:auto!important;visibility:visible!important;opacity:1!important}';
+style.textContent=`
+#policy-portfolio-v28{z-index:50000!important;pointer-events:auto!important;visibility:visible!important;opacity:1!important}
+.pp28-modalback,#pp28-modalback,#pp28-family-modal{z-index:60000!important;pointer-events:auto!important;visibility:visible!important;opacity:1!important}
+`;
 document.head.appendChild(style);
 window.AIAPolicyNavigationHardfixV64={open:openPolicyHard,ensureLayer};
 })();
