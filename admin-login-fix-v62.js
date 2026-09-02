@@ -13,6 +13,33 @@
   function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
   function fmt(v){if(!v)return '-';try{return new Intl.DateTimeFormat('th-TH',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));}catch{return '-';}}
 
+  async function verifyAdmin(){
+    const {data:{user},error:userError}=await withTimeout(sb.auth.getUser(),'การตรวจสอบ Session');
+    if(userError||!user) throw new Error('ไม่พบ Session กรุณาเข้าสู่ระบบใหม่');
+    const {data,error}=await withTimeout(sb.functions.invoke('admin-console',{body:{action:'status'}}),'การตรวจสอบสิทธิ์ Admin');
+    if(error){
+      let message=error.message||'ตรวจสอบสิทธิ์ Admin ไม่สำเร็จ';
+      try{const body=await error.context?.json?.();if(body?.error)message=body.error;}catch(_){}
+      throw new Error(message);
+    }
+    if(data?.error) throw new Error(data.error);
+    if(!data?.admin) throw new Error('บัญชีนี้ไม่มีสิทธิ์ Admin');
+    return user;
+  }
+
+  function openDashboard(user){
+    const loginView=document.getElementById('loginView');
+    const adminView=document.getElementById('adminView');
+    const status=document.getElementById('loginStatus');
+    if(loginView) loginView.classList.add('hidden');
+    if(adminView) adminView.classList.remove('hidden');
+    const adminEmail=document.getElementById('adminEmail');
+    if(adminEmail) adminEmail.textContent=user?.email||'Admin';
+    if(status) status.textContent='เข้าสู่ระบบสำเร็จ';
+    setTimeout(()=>document.getElementById('refreshBtn')?.click(),50);
+    setTimeout(loadSignupNotifications,300);
+  }
+
   async function loadSignupNotifications(){
     const adminView=document.getElementById('adminView');
     if(!adminView || adminView.classList.contains('hidden')) return;
@@ -47,9 +74,9 @@
 
   function install(){
     const oldBtn=document.getElementById('loginBtn');
-    if(oldBtn && oldBtn.dataset.loginFix!=='1'){
+    if(oldBtn && oldBtn.dataset.loginFix!=='2'){
       const btn=oldBtn.cloneNode(true);
-      btn.dataset.loginFix='1';
+      btn.dataset.loginFix='2';
       oldBtn.replaceWith(btn);
       btn.addEventListener('click',async()=>{
         const email=document.getElementById('email')?.value.trim()||'';
@@ -62,11 +89,8 @@
           const {data,error}=await withTimeout(sb.auth.signInWithPassword({email,password}),'การเข้าสู่ระบบ');
           if(error) throw error;
           if(!data?.session||!data?.user) throw new Error('เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่');
-          const {data:adminRow,error:adminError}=await sb.from('admin_users').select('user_id').eq('user_id',data.user.id).maybeSingle();
-          if(adminError) throw adminError;
-          if(!adminRow) throw new Error('บัญชีนี้ไม่มีสิทธิ์ Admin');
-          if(status)status.textContent='เข้าสู่ระบบสำเร็จ กำลังเปิด Admin Dashboard...';
-          location.reload();
+          const user=await verifyAdmin();
+          openDashboard(user);
         }catch(err){
           try{await sb.auth.signOut();}catch(_){}
           if(status)status.textContent=err?.message||'เข้าสู่ระบบไม่สำเร็จ';
@@ -74,11 +98,29 @@
         }
       });
     }
+
+    const password=document.getElementById('password');
+    if(password && !password.dataset.adminEnterFix){
+      password.dataset.adminEnterFix='1';
+      password.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){
+          e.preventDefault();
+          document.getElementById('loginBtn')?.click();
+        }
+      },true);
+    }
+
     const observer=new MutationObserver(()=>{ if(!document.getElementById('adminView')?.classList.contains('hidden')) loadSignupNotifications(); });
     const adminView=document.getElementById('adminView');
     if(adminView) observer.observe(adminView,{attributes:true,attributeFilter:['class']});
-    setTimeout(loadSignupNotifications,1200);
     document.getElementById('refreshBtn')?.addEventListener('click',()=>setTimeout(loadSignupNotifications,300));
+
+    setTimeout(async()=>{
+      try{
+        const {data:{session}}=await sb.auth.getSession();
+        if(session){const user=await verifyAdmin();openDashboard(user);}
+      }catch(_){/* stay on login */}
+    },150);
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',install);
